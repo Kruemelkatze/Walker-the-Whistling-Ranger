@@ -41,6 +41,18 @@ var detectorElem,
 let data_buffer; // windowing data --
 let lastFrameTime
 
+var autoUpdate = false;
+
+var onPitchDetected = [];
+
+function addListener(listener) {
+	onPitchDetected.push(listener);
+}
+
+function removeListener(listener) {
+	onPitchDetected = onPitchDetected.filter(l => l != listener);
+}
+
 /*window.onload = function() {
 	audioContext = new AudioContext();
 	MAX_SIZE = Math.max(4,Math.floor(audioContext.sampleRate/5000));	// corresponds to a 5kHz signal
@@ -347,7 +359,18 @@ function autoCorrelate( buf, sampleRate ) {
 	return sampleRate/T0;
 }
 
+function getPitch() {
+	analyser.getFloatTimeDomainData( buf );
+	var ac = autoCorrelate( buf, audioContext.sampleRate );
+
+	return ac;
+}
+
 function updatePitch( time ) {
+
+	if(!autoUpdate || !pitchElem)
+		return;
+
 	var cycles = new Array;
 	analyser.getFloatTimeDomainData( buf );
 	var ac = autoCorrelate( buf, audioContext.sampleRate );
@@ -368,6 +391,8 @@ function updatePitch( time ) {
 		// showing the log base 2 of the frequency and the sampling time. 
 	 	pitchElem.innerText = Math.round(Math.log2( avg )*100)/100 + " - " + frametime; // log of the frequencey - TODO: make nice ...
 	}
+
+	onPitchDetected.forEach(l => l());
 
 	if (!window.requestAnimationFrame)
 		window.requestAnimationFrame = window.webkitRequestAnimationFrame;
