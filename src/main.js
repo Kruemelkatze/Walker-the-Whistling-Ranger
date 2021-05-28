@@ -3,8 +3,11 @@ const queue = new Queue();
 const data = [];
 
 const cutoffFrequency = 5000;
-
+const idleTimeForStop = 400;
 var interval;
+
+var idle = true;
+var hasBeenIdleSince = null;
 
 function startApp() {
     startDetection();
@@ -15,16 +18,34 @@ function startApp() {
 
 function loop() {
     var pitch = getPitch();
+    var now = Date.now();
 
-    var log = -1;
+    var log;
     if (pitch > cutoffFrequency) {
         log = -2;
-    } else if (pitch > 0) {
+    } else if (pitch < 0) {
+        log = -1;
+    } else {
         log = Math.round(Math.log2(pitch) * 100) / 100;
     }
 
-    var d = [Date.now(), log];
-    data.push(d);
+    if (log > 0) {
+        if (idle) {
+            idle = false;
+            console.log("Started")
+            data.length = 0;
+        }
+        hasBeenIdleSince = null;
+        var d = log;//[now, log];
+        data.push(d);
+
+    } else if (hasBeenIdleSince == null && log < 0) {
+        hasBeenIdleSince = now;
+    } else if (!idle && now - hasBeenIdleSince > idleTimeForStop) {
+        idle = true;
+        console.log("stopped");
+        console.dir(data);
+    }
 }
 
 function stopApp() {
