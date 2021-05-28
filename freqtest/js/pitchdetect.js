@@ -38,6 +38,8 @@ var detectorElem,
 	noteElem,
 	detuneElem,
 	detuneAmount;
+let data_buffer; // windowing data --
+let lastFrameTime
 
 /*window.onload = function() {
 	audioContext = new AudioContext();
@@ -108,6 +110,8 @@ startDetection = function() {
 							"optional": []
 					},
 			}, gotStream);
+
+			data_buffer = [];
 }
 
 function error() {
@@ -353,7 +357,16 @@ function updatePitch( time ) {
  	} else {
 
 		pitch = ac;
-	 	pitchElem.innerText = Math.round(Math.log2( pitch )*100)/100 ; // log of the frequencey - TODO: make nice ...
+		// windowing in an array ..
+		data_buffer.push(ac);
+		if (data_buffer.length > 10) data_buffer.shift();
+		// averaging the
+		avg = data_buffer.reduce((a, b) => { return a + b; })/data_buffer.length;
+		// estimating the frame set
+		let frametime = Date.now() - lastFrameTime;
+		lastFrameTime = Date.now();
+		// showing the log base 2 of the frequency and the sampling time. 
+	 	pitchElem.innerText = Math.round(Math.log2( avg )*100)/100 + " - " + frametime; // log of the frequencey - TODO: make nice ...
 	}
 
 	if (!window.requestAnimationFrame)
