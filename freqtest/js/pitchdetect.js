@@ -353,7 +353,7 @@ function updatePitch( time ) {
  	} else {
 
 		pitch = ac;
-	 	pitchElem.innerText = Math.round(Math.log2( pitch )*100)/100 ;
+	 	pitchElem.innerText = Math.round(Math.log2( pitch )*100)/100 ; // log of the frequencey - TODO: make nice ...
 	}
 
 	if (!window.requestAnimationFrame)
