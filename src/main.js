@@ -34,7 +34,7 @@ function stopApp() {
 function saveData() {
     var csvString = "";
     for (let d of data) {
-        csvString += `${d[1]}`.replace(".", ",");
+        csvString += `${d[1]}\n`.replace(".", ",");
     }
 
     console.log(csvString)
