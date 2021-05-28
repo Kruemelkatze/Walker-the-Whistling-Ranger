@@ -1,0 +1,20 @@
+{
+  "name": "whistling-weirdos",
+  "version": "1.0.0",
+  "description": "A #klujam2021 game about... well, we are still trying to find out.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx local-web-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kruemelkatze/whistling-weirdos.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kruemelkatze/whistling-weirdos/issues"
+  },
+  "homepage": "https://github.com/Kruemelkatze/whistling-weirdos#readme"
+}
