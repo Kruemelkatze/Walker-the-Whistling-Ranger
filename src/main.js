@@ -2,6 +2,8 @@ const fps = 30;
 const queue = new Queue();
 const data = [];
 
+const cutoffFrequency = 5000;
+
 var interval;
 
 function startApp() {
@@ -13,7 +15,13 @@ function startApp() {
 
 function loop() {
     var pitch = getPitch();
-    var log = pitch > 0 ? Math.round(Math.log2(pitch) * 100) / 100 : -1;
+
+    var log = -1;
+    if (pitch > cutoffFrequency) {
+        log = -2;
+    } else if (pitch > 0) {
+        log = Math.round(Math.log2(pitch) * 100) / 100;
+    }
 
     var d = [Date.now(), log];
     data.push(d);
@@ -24,9 +32,9 @@ function stopApp() {
 }
 
 function saveData() {
-    var csvString = "Time,Log\n";
+    var csvString = "";
     for (let d of data) {
-        csvString += `${d[0]},${d[1]}\n`;
+        csvString += `${d[1]}`.replace(".", ",");
     }
 
     console.log(csvString)
