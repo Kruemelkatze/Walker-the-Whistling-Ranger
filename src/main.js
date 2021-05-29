@@ -1,150 +1,80 @@
-const fps = 30;
-const queue = new Queue();
-const data = [];
-const minLengthForNote = (5 / 30) * fps;
-const mitNoteDiffLog = 0.3;
+var canvas = document.getElementById("renderCanvas"); // Get the canvas element
+var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 
-const cutoffFrequency = 5000;
-const idleTimeForStop = 500;
-var interval;
 
-var start = 0;
-var idle = true;
-var hasBeenIdleSince = null;
+/******* End of the create scene function ******/
 
-function startApp() {
-    startDetection();
+let instructions = new Instructions();
+let credits = new Credits();
+let menu = new Menu();
+let game = new Game();
+let end = new TheEnd();
 
-    interval = setInterval(loop, 1000 / fps);
+let currentScene = null;
+setNewScene(menu);
+
+function handleKeyPress(event) {
+    console.log(event);
+
+    if (document.querySelector("#userInfo")) document.querySelector("#userInfo").remove();
+
+    handleSceneKeys(event);
+    handleActionKeys(event);
+}
+
+function handleSceneKeys(event) {
+    let newScene = null;
+
+    switch (event.key) {
+        case "1":
+            newScene = instructions;
+            break;
+        case "2":
+            newScene = menu;
+            break;
+        case "3":
+            newScene = game;
+            break;
+        case "4":
+            newScene = end;
+            break;
+        case "Escape":
+            newScene = menu;
+            break;
+        default:
+            break;
+    }
+
+    setNewScene(newScene);
 }
 
 
-function loop() {
-    var pitch = getPitch();
-    var now = Date.now();
-
-    var log;
-    if (pitch > cutoffFrequency) {
-        log = -2;
-    } else if (pitch < 0) {
-        log = -1;
-    } else {
-        log = Math.round(pitch * 100) / 100;
-    }
-
-    if (log > 0) {
-        if (idle) {
-            idle = false;
-            console.log("Started")
-            start = now;
-            data.length = 0;
+function setNewScene(newScene) {
+    console.log(newScene);
+    if (newScene != null) {
+        if (currentScene) {
+            currentScene.dispose();
         }
-        hasBeenIdleSince = null;
-        var d = [log, (now - start)];
-        data.push(d);
-
-    } else if (hasBeenIdleSince == null && log < 0) {
-        hasBeenIdleSince = now;
-    } else if (!idle && now - hasBeenIdleSince > idleTimeForStop) {
-        idle = true;
-        console.log("stopped");
-        processData(data);
+        currentScene = newScene;
+        currentScene.createScene();
+        currentScene.onLoad();
     }
 }
 
-function processData(windowData) {
-    // Quantize
-    // var quantizedData = windowData.map(x => Math.floor(x[0] * 4) / 4);
+function handleActionKeys(event) {
+    console.log(event.key)
+}
 
-    // //Filter out ausreißer
-    // for (let i = 1; i < quantizedData.length - 1; i++) {
-    //     var e = quantizedData[i];
 
-    //     if (e != quantizedData[i - 1] && e != quantizedData[i + 1]) {
-    //         quantizedData[i] = quantizedData[i - 1];
-    //     }
-    // }
-
-    // if (quantizedData[quantizedData.length - 1] != quantizedData[quantizedData.length - 2]) {
-    //     quantizedData[quantizedData.length - 1] = quantizedData[quantizedData.length - 2];
-    // }
-
-    // // get notes
-    // var notes = [];
-    // var previousNote = quantizedData[0];
-    // var previousNoteCount = 0;
-    // for (let i = 0; i < quantizedData.length; i++) {
-    //     const element = quantizedData[i];
-    //     if (element == previousNote) {
-    //         previousNoteCount++;
-    //         continue
-    //     }
-
-    //     if (previousNoteCount >= minLengthForNote) {
-    //         notes.push(previousNote);
-    //     }
-
-    //     previousNote = element;
-    //     previousNoteCount = 0;
-    // }
-
-    // if (previousNoteCount >= minLengthForNote) {
-    //     notes.push(previousNote);
-    // }
-
-    var clusters = figue.kmeans(3, windowData);
-    var clusteredNotes = [];
-    for (let ass of clusters.assignments) {
-        if (!clusteredNotes.includes(ass)) {
-            clusteredNotes.push(ass);
-        }
+engine.runRenderLoop(function () {
+    if (currentScene && currentScene.isReady()) {
+        currentScene.render();
     }
+});
 
-    clusteredNotes = clusteredNotes.map(i => Math.log2(clusters.centroids[i][0]));
 
-    // console.dir(windowData)
-    // console.dir(notes)
-    console.dir(clusteredNotes)
-    // console.dir(clusters)
+// Watch for browser/canvas resize events
+window.addEventListener("resize", function () {
+    engine.resize();
+});
 
-    var directions = [];
-    for (let i = 0; i < clusteredNotes.length - 1; i++) {
-        var diff = clusteredNotes[i + 1] - clusteredNotes[i];
-        if (diff > mitNoteDiffLog) {
-            directions.push(1);
-        } else if (diff < -mitNoteDiffLog) {
-            directions.push(-1);
-        } else {
-            directions.push(0);
-        }
-    }
-
-    console.dir(directions);
-}
-
-function stopApp() {
-    clearInterval(interval);
-}
-
-function saveData() {
-    var csvString = "";
-    for (let d of data) {
-        csvString += `${d[1]}\n`.replace(".", ",");
-    }
-
-    console.log(csvString)
-    download("pitches.csv", csvString);
-}
-
-function download(filename, text) {
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', filename);
-
-    element.style.display = 'none';
-    document.body.appendChild(element);
-
-    element.click();
-
-    document.body.removeChild(element);
-}

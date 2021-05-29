@@ -1,25 +1,49 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title>Pitch Detector</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Walker, Whistling Ranger</title>
+
     <style>
-        body {
-            font: 14pt 'Lato', sans-serif;
+        html, body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
         }
     </style>
+
+    <script src="babylon.js"></script>
+    <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
+
+    <script src="scenes/instructions.js" defer></script>
+    <script src="scenes/game.js" defer></script>
+    <script src="scenes/menu.js" defer></script>
+    <script src="scenes/credits.js" defer></script>
+    <script src="scenes/theEnd.js" defer></script>
+    <script src="main.js" defer></script>
+
 </head>
 
-<body>
-    <button onclick="startApp()">Start App</button>
-    <button onclick="stopApp()">Stop App</button>
-    <button onclick="saveData()">Save Data</button>
-    <div class="pitch"><span id="pitch">--</span>Hz</div>
+<body onkeyup="handleKeyPress(event)">
+    <!-- <div id="userInfo" style="position:absolute;">
+        All Scenes (Press Keys): <br>
+        1: Introduction <br>
+        2: Instructions <br>
+        3: Menu <br>
+        4: Game <br>
+        5: The End
+    </div> -->
+    <canvas id="renderCanvas" touch-action="none"></canvas>
 
-    <script src="../freqtest/js/pitchdetect.js"></script>
-    <script src="figue.js"></script>
-    <script src="queue.js"></script>
-    <script src="main.js"></script>
 </body>
 
 </html>
