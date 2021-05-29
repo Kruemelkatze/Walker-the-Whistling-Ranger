@@ -26,14 +26,19 @@ class Game {
 
         // TODO make magic
 
-        this.overlay = this.getOverlayPlane("../videos/dancer1.webm", scene)
+        var ourGreen = BABYLON.Color3(102, 206, 16)
+        // this.overlay = this.getOverlayPlane("../videos/dancer1.webm", scene)
+        // this.overlay = this.getOverlayPlane("../videos/oger/left_attack.webm", scene)
+        // this.overlay = this.getOverlayPlane("../videos/oger/ogre_appear.webm", scene)
+        // this.overlay = this.getOverlayPlane("../videos/oger/ogre_flex.webm", scene)
+        this.overlay = this.getOverlayPlane("../videos/oger/whistle.webm", scene)
 
 
         this.scene = scene;
         console.log("START");
     }
 
-    getOverlayPlane(file, scene) {
+    getOverlayPlane(file, scene, transColor = BABYLON.Color3.Black()) {
 
         var plane = BABYLON.MeshBuilder.CreatePlane("plane_overay", {
             width: 4, height: 2
@@ -46,9 +51,9 @@ class Game {
 
         const videoMaterial = new BABYLON.PBRMaterial('VideoMaterial', scene);
         videoMaterial.albedoTexture = undefined;
-        videoMaterial.reflectivityColor = BABYLON.Color3.Black();
-        videoMaterial.reflectionColor = BABYLON.Color3.Black();
-        videoMaterial.albedoColor = BABYLON.Color3.Black();
+        // videoMaterial.reflectivityColor = transColor;
+        // videoMaterial.reflectionColor = transColor;
+        videoMaterial.albedoColor = transColor;
         videoMaterial.emissiveColor = BABYLON.Color3.White();
         videoMaterial.unlit = true;
 
