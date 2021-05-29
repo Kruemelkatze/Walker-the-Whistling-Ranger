@@ -9,6 +9,11 @@ class Path {
     nextTurnRight = null;
     waitforTurn = false;
 
+    encounterAfterXSeconds = 20;
+    minTimeBetweenEncounters = 5;
+    encounterActive = false;
+    lastEncounter = 0;
+
     get currentVideo() {
         return this.videoPlane.material.diffuseTexture ? this.videoPlane.material.diffuseTexture.video : null;
     }
@@ -73,13 +78,15 @@ class Path {
             case "ArrowUp":
                 this.videoSpeed *= 2;
                 this.videoSpeed = Math.min(this.videoSpeed, 16);
-                if (this.currentVideo) {
+                if (this.currentVideo && !this.encounterActive) {
                     this.currentVideo.playbackRate = this.videoSpeed;
                 }
                 break;
             case "ArrowDown":
                 this.videoSpeed /= 2;
-                this.currentVideo.playbackRate = this.videoSpeed;
+                if (this.currentVideo && !this.encounterActive) {
+                    this.currentVideo.playbackRate = this.videoSpeed;
+                }
                 break;
             case "ArrowRight":
                 this.onCommandReceived("turn", true);
@@ -89,6 +96,13 @@ class Path {
                 break;
             case "KeyR":
                 this.setVideo(this.pathData[0]);
+                break;
+            case "KeyE":
+                if (this.encounterActive) {
+                    this.resolveEncounter();
+                } else {
+                    this.setEncounter();
+                }
                 break;
         }
     }
@@ -121,6 +135,8 @@ class Path {
         }
         this.videoPlane.material.diffuseTexture = new BABYLON.VideoTexture("video", `${this.videoFolder}/${videoData.videoFile}`, this.scene, true);
         this.currentVideo.loop = false;
+
+        this.resolveEncounter();
         this.currentVideo.playbackRate = this.videoSpeed;
     }
 
@@ -202,6 +218,26 @@ class Path {
         return (this.scene && this.scene.isReady());
     }
 
+    setEncounter() {
+        if (this.encounterActive)
+            return;
+
+        console.log("Encounter!")
+        this.encounterActive = true;
+        this.lastEncounter = Date.now();
+        this.currentVideo.playbackRate = 1;
+    }
+
+    resolveEncounter(success) {
+        if (!this.encounterActive)
+            return;
+
+        console.log("Encounter Resolved!")
+        this.encounterActive = false;
+        this.lastEncounter = 0;
+        this.currentVideo.playbackRate = this.videoSpeed;
+    }
+
     render() {
 
         if (this.scene)
@@ -212,12 +248,19 @@ class Path {
 
         // TODO do something
         var vid = this.currentVideo;
-        if (vid && vid.currentTime >= vid.duration && this.nextTurnRight != null) {
+        if (vid && vid.currentTime >= vid.duration && this.nextTurnRight != null && !this.encounterActive) {
             this.nextVideo(this.nextTurnRight);
         } else if (vid && vid.duration - vid.currentTime < 5) {
             this.waitForTurn = true;
         } else {
             this.waitForTurn = false;
+        }
+
+        if (!this.encounterActive && !this.waitForTurn && Date.now() - this.lastEncounter > this.minTimeBetweenEncounters * 1000) {
+            var enc = Math.random() < (this.videoSpeed / this.encounterAfterXSeconds / engine._fps);
+            if (enc) {
+                this.setEncounter();
+            }
         }
 
     }
