@@ -1,4 +1,4 @@
-const fps = 30;
+/*const fps = 30;
 const queue = new Queue();
 const data = [];
 const minLengthForNote = (5 / 30) * fps;
@@ -12,9 +12,24 @@ let minClusterDistance = 75;
 
 var start = 0;
 var idle = true;
-var hasBeenIdleSince = null;
+var hasBeenIdleSince = null;*/
 
-function startApp() {
+var whistleHandler = new WhistleHandler();
+
+function testWhistleHandlerStart() {
+    this.whistleHandler = new WhistleHandler();
+    this.whistleHandler.enableWhistleHandler(reactOnWhistleCommand);
+}
+
+function reactOnWhistleCommand(response) {
+    console.log(response);
+}
+
+function testWhistleHandlerStop() {
+    this.whistleHandler.disableWhistleHandler();
+}
+
+/*function startApp() {
     startDetection();
 
     interval = setInterval(loop, 1000 / fps);
@@ -228,7 +243,7 @@ function processData(windowData) {
     }
     third /= count;
 
-    console.log("first: " + first + ", second: " + second + ", third: " + third);*/
+    console.log("first: " + first + ", second: " + second + ", third: " + third);
 
 }
 
@@ -291,3 +306,5 @@ function calculateStdDeviation(clusters, data) {
     }
     return deviations;
 }
+
+*/
