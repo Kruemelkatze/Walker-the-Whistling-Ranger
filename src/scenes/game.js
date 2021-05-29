@@ -28,10 +28,12 @@ class Game {
 
         var ourGreen = BABYLON.Color3(102, 206, 16)
         // this.overlay = this.getOverlayPlane("../videos/dancer1.webm", scene)
-        // this.overlay = this.getOverlayPlane("../videos/oger/left_attack.webm", scene)
-        // this.overlay = this.getOverlayPlane("../videos/oger/ogre_appear.webm", scene)
-        // this.overlay = this.getOverlayPlane("../videos/oger/ogre_flex.webm", scene)
-        this.overlay = this.getOverlayPlane("../videos/oger/whistle.webm", scene)
+
+        // misc
+        // this.overlay = this.getOverlayPlane("../videos/encounters/misc/Whistle.webm", scene)
+
+        // encounters
+        this.overlay = this.getOverlayPlane("../videos/encounters/fabian.webm", scene)
 
 
         this.scene = scene;
