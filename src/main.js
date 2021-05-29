@@ -8,7 +8,7 @@ const cutoffFrequency = 5000;
 const idleTimeForStop = 500;
 var interval;
 
-let minClusterDistance = 100;
+let minClusterDistance = 75;
 
 var start = 0;
 var idle = true;
@@ -108,17 +108,17 @@ function howManyPitches(windowData, maxPitches=3) {
 
         let cleanedMapCount = 0;
         for (let c of clusterCountMap) {
-            if(c.count > 1) {
+            if(c.count > 2) {
                 cleanedMapCount++;
             }
         }
 
         //if((sum * 1.1) < devMax && countAssignmentChange < pitchTestResult[i].clusters.centroids.length) {
-        if(cleanedMapCount <= pitchTestResult[i].clusters.centroids.length + 1) {
+        //if((cleanedMapCount / 2) <= pitchTestResult[i].clusters.centroids.length) {
             //devMax = sum;
             pitchCount = pitchTestResult[i].clusters.centroids.length;
             detectedPitchSet = clusterCountMap;
-        }
+        //}
     }
 
     for(var i = 0; i < detectedPitchSet.length - 1; i++) {
@@ -202,7 +202,7 @@ function processData(windowData) {
     // }
     //
     // console.dir(directions);
-    howManyPitches(windowData, 3);
+    howManyPitches(windowData, 5);
 
     //console.log(windowData);
     /*let onethird = windowData.length / 3;
