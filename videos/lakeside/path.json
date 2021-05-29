@@ -1,0 +1,51 @@
+[
+    {
+        "id": "L_1",
+        "videoFile": "L_1-small.mp4",
+        "nextLeft": "L_2_2",
+        "nextRight": "L_2_1",
+        "events": []
+    },
+    {
+        "id": "L_2_1",
+        "videoFile": "L_2_1-small.mp4",
+        "nextLeft": "L_2_1_2",
+        "nextRight": "L_2_1_1",
+        "events": []
+    },
+    {
+        "id": "L_2_2",
+        "videoFile": "L_2_2-small.mp4",
+        "nextLeft": "L_2_2_2",
+        "nextRight": "L_2_2_1",
+        "events": []
+    },
+    {
+        "id": "L_2_1_1",
+        "videoFile": "L_2_1_1-small.mp4",
+        "nextLeft": "",
+        "nextRight": "",
+        "events": []
+    },
+    {
+        "id": "L_2_1_2",
+        "videoFile": "L_2_1_2-small.mp4",
+        "nextLeft": "",
+        "nextRight": "",
+        "events": []
+    },
+    {
+        "id": "L_2_2_1",
+        "videoFile": "L_2_2_1-small.mp4",
+        "nextLeft": "",
+        "nextRight": "",
+        "events": []
+    },
+    {
+        "id": "L_2_2_2",
+        "videoFile": "L_2_2_2-small.mp4",
+        "nextLeft": "",
+        "nextRight": "",
+        "events": []
+    }
+]

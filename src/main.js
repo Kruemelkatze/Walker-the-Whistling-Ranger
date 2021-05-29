@@ -8,14 +8,13 @@ let instructions = new Instructions();
 let credits = new Credits();
 let menu = new Menu();
 let game = new Game();
+let path = new Path();
 let end = new TheEnd();
 
 let currentScene = null;
 setNewScene(menu);
 
 function handleKeyPress(event) {
-    console.log(event);
-
     if (document.querySelector("#userInfo")) document.querySelector("#userInfo").remove();
 
     handleSceneKeys(event);
@@ -36,6 +35,9 @@ function handleSceneKeys(event) {
             newScene = game;
             break;
         case "4":
+            newScene = path;
+            break;
+        case "5":
             newScene = end;
             break;
         case "Escape":
@@ -50,6 +52,9 @@ function handleSceneKeys(event) {
 
 
 function setNewScene(newScene) {
+    if(!newScene)
+        return;
+
     console.log(newScene);
     if (newScene != null) {
         if (currentScene) {
@@ -62,7 +67,7 @@ function setNewScene(newScene) {
 }
 
 function handleActionKeys(event) {
-    console.log(event.key)
+    //console.log(event.key)
 }
 
 
