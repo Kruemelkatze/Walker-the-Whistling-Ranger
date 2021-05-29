@@ -20,6 +20,7 @@ class Path {
 
     constructor() {
         this.scene;
+        this.whistleHandler;
     }
 
     /**
@@ -76,17 +77,10 @@ class Path {
 
         switch (kbInfo.event.code) {
             case "ArrowUp":
-                this.videoSpeed *= 2;
-                this.videoSpeed = Math.min(this.videoSpeed, 16);
-                if (this.currentVideo && !this.encounterActive) {
-                    this.currentVideo.playbackRate = this.videoSpeed;
-                }
+                this.speedUp();
                 break;
             case "ArrowDown":
-                this.videoSpeed /= 2;
-                if (this.currentVideo && !this.encounterActive) {
-                    this.currentVideo.playbackRate = this.videoSpeed;
-                }
+                this.slowDown();
                 break;
             case "ArrowRight":
                 this.onCommandReceived("turn", true);
@@ -107,6 +101,23 @@ class Path {
         }
     }
 
+    speedUp() {
+        this.videoSpeed *= 2;
+        this.videoSpeed = Math.min(this.videoSpeed, 16);
+        console.log("speed up: " + this.videoSpeed);
+        if (this.currentVideo && !this.encounterActive) {
+            this.currentVideo.playbackRate = this.videoSpeed;
+        }
+    }
+
+    slowDown() {
+        this.videoSpeed /= 2;
+        console.log("slow down: " + this.videoSpeed);
+        if (this.currentVideo && !this.encounterActive) {
+            this.currentVideo.playbackRate = this.videoSpeed;
+        }
+    }
+
     onCommandReceived(type, val) {
         switch (type) {
             case "turn":
@@ -122,6 +133,35 @@ class Path {
 
         var first = pathData[0];
         this.setVideo(first);
+
+        this.whistleHandler = new WhistleHandler();
+        this.whistleHandler.enableWhistleHandler((whistlePattern) => {
+            switch (whistlePattern.length) {
+                case 0:
+                    break;
+                case 1:
+                    if (whistlePattern[0] == -1) {
+                        this.onCommandReceived("turn", false);
+                        console.log("turn left");
+                    } else if (whistlePattern[0] == 1) {
+                        this.onCommandReceived("turn", true);
+                        console.log("turn right");
+                    }
+                    break;
+                case 2:
+                    if (whistlePattern[0] == 1 && whistlePattern[1] == -1) {
+                        this.speedUp();
+                    } else if (whistlePattern[0] == -1 && whistlePattern[1] == 1) {
+                        this.slowDown();
+                    } else if (whistlePattern[0] == 1 && whistlePattern[1] == 1) {
+                        this.resolveEncounter();    // TODO check which pattern is expected to solve the current encounter
+                    } else if (whistlePattern[0] == -1 && whistlePattern[1] == -1) {
+
+                    }
+                    break;
+            }
+
+        });
     }
 
     setVideo(videoData) {
@@ -141,7 +181,7 @@ class Path {
     }
 
     nextVideo(right) {
-        var { nextLeft, nextRight } = this.currentVideoData;
+        var {nextLeft, nextRight} = this.currentVideoData;
 
         var nextId = right ? nextRight : nextLeft;
         var nextData = this.pathData.find(v => v.id == nextId);
@@ -150,7 +190,6 @@ class Path {
             this.setVideo(nextData);
         }
     }
-
 
 
     getOverlayPlane(file, scene) {
@@ -224,8 +263,8 @@ class Path {
 
         console.log("Encounter!")
         this.encounterActive = true;
-        this.lastEncounter = Date.now();
-        this.currentVideo.playbackRate = 1;
+        this.lastEncounter = this.currentVideo.currentTime;
+        this.currentVideo.playbackRate = 0.5;
     }
 
     resolveEncounter(success) {
@@ -234,7 +273,7 @@ class Path {
 
         console.log("Encounter Resolved!")
         this.encounterActive = false;
-        this.lastEncounter = 0;
+        this.lastEncounter = this.currentVideo.currentTime;
         this.currentVideo.playbackRate = this.videoSpeed;
     }
 
@@ -251,12 +290,15 @@ class Path {
         if (vid && vid.currentTime >= vid.duration && this.nextTurnRight != null && !this.encounterActive) {
             this.nextVideo(this.nextTurnRight);
         } else if (vid && vid.duration - vid.currentTime < 5) {
+            if (!this.waitForTurn) {
+                console.log("waiting for turn")
+            }
             this.waitForTurn = true;
         } else {
             this.waitForTurn = false;
         }
 
-        if (!this.encounterActive && !this.waitForTurn && Date.now() - this.lastEncounter > this.minTimeBetweenEncounters * 1000) {
+        if (!this.encounterActive && !this.waitForTurn && this.currentVideo.currentTime - this.lastEncounter > this.minTimeBetweenEncounters) {
             var enc = Math.random() < (this.videoSpeed / this.encounterAfterXSeconds / engine._fps);
             if (enc) {
                 this.setEncounter();
