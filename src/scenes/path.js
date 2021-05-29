@@ -52,9 +52,9 @@ class Path {
 //        var plane = BABYLON.MeshBuilder.CreateSphere("plane", { arc:0.5, diameterY:9, diameterX: 16, sideOrientation: BABYLON.Mesh.DOUBLESIDE }, this.scene); // default plane
 //        plane.rotation.z = Math.PI;
 //        plane.rotation.y = Math.PI;
-//        plane.material = new BABYLON.StandardMaterial("mat", this.scene);
-        // plane.material.diffuseTexture = new BABYLON.VideoTexture("video", "../videos/hallway_small.mp4", this.scene, true);
-        // plane.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
+        plane.material = new BABYLON.StandardMaterial("mat", this.scene);
+        plane.material.diffuseTexture = new BABYLON.VideoTexture("video", "../videos/hallway_small.mp4", this.scene, true);
+        plane.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
         this.videoPlane = plane;
 
         this.addHUD()
