@@ -26,9 +26,54 @@ class Game {
 
         // TODO make magic
 
+        this.overlay = this.getOverlayPlane("../videos/dancer1.webm", scene)
+
 
         this.scene = scene;
         console.log("START");
+    }
+
+    getOverlayPlane(file, scene) {
+
+        var plane = BABYLON.MeshBuilder.CreatePlane("plane_overay", {
+            width: 4, height: 2
+        }, scene); // default plane
+
+        const video = document.createElement('video');
+        video.loop = true;
+        video.autoplay = true;
+        video.src = file;
+
+        const videoMaterial = new BABYLON.PBRMaterial('VideoMaterial', scene);
+        videoMaterial.albedoTexture = undefined;
+        videoMaterial.reflectivityColor = BABYLON.Color3.Black();
+        videoMaterial.reflectionColor = BABYLON.Color3.Black();
+        videoMaterial.albedoColor = BABYLON.Color3.Black();
+        videoMaterial.emissiveColor = BABYLON.Color3.White();
+        videoMaterial.unlit = true;
+
+        const videoTexture = new BABYLON.VideoTexture(
+            'VideoTexture',
+            video,
+            scene,
+            true,
+            undefined,
+            undefined,
+            {
+                autoPlay: true,
+                loop: true,
+                autoUpdateTexture: true
+            }
+        );
+        videoMaterial.emissiveTexture = videoTexture;
+        videoMaterial.opacityTexture = videoTexture;
+        // ground.material = videoMaterial;
+
+        plane.material = videoMaterial;
+        plane.material.diffuseTexture = videoTexture;
+        plane.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
+
+        return plane;
     }
 
     addHUD() {
