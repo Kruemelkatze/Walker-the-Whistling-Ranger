@@ -49,7 +49,7 @@ class WhistleHandler {
         if (log > 0) {
             if (this.idle) {
                 this.idle = false;
-                console.log("Started")
+               // console.log("Started")
                 this.start = now;
                 this.data.length = 0;
             }
@@ -111,7 +111,7 @@ class WhistleHandler {
             
             clusterCountMap.push({ "id": ass, "count": countAssignment, "centroid": pitchTestResult[i].clusters.centroids[ass][0] });
 
-            console.log("ClusterCountMap", clusterCountMap);
+            //console.log("ClusterCountMap", clusterCountMap);
 
             pitchCount = pitchTestResult[i].clusters.centroids.length;
             detectedPitchSet = clusterCountMap;

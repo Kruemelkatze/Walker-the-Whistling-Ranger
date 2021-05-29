@@ -49,9 +49,9 @@ class Path {
 
         var plane = BABYLON.MeshBuilder.CreatePlane("plane", { width: x, height: y }, this.scene); // default plane
         // projection on a sphere ...
-//        var plane = BABYLON.MeshBuilder.CreateSphere("plane", { arc:0.5, diameterY:9, diameterX: 16, sideOrientation: BABYLON.Mesh.DOUBLESIDE }, this.scene); // default plane
-//        plane.rotation.z = Math.PI;
-//        plane.rotation.y = Math.PI;
+        //        var plane = BABYLON.MeshBuilder.CreateSphere("plane", { arc:0.5, diameterY:9, diameterX: 16, sideOrientation: BABYLON.Mesh.DOUBLESIDE }, this.scene); // default plane
+        //        plane.rotation.z = Math.PI;
+        //        plane.rotation.y = Math.PI;
         plane.material = new BABYLON.StandardMaterial("mat", this.scene);
         plane.material.diffuseTexture = new BABYLON.VideoTexture("video", "../videos/hallway_small.mp4", this.scene, true);
         plane.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
@@ -104,20 +104,18 @@ class Path {
     }
 
     speedUp() {
-        this.videoSpeed *= 2;
-        this.videoSpeed = Math.min(this.videoSpeed, 16);
+        this.videoSpeed++;
+        this.videoSpeed = Math.min(this.videoSpeed, 3);
         console.log("speed up: " + this.videoSpeed);
-        if (this.currentVideo && !this.encounterActive) {
-            this.currentVideo.playbackRate = this.videoSpeed;
-        }
+        this.setPlaybackRate();
     }
 
     slowDown() {
-        this.videoSpeed /= 2;
+        this.videoSpeed--;
+        this.videoSpeed = Math.max(this.videoSpeed, 1);
+
         console.log("slow down: " + this.videoSpeed);
-        if (this.currentVideo && !this.encounterActive) {
-            this.currentVideo.playbackRate = this.videoSpeed;
-        }
+        this.setPlaybackRate();
     }
 
     onCommandReceived(type, val) {
@@ -126,6 +124,23 @@ class Path {
                 if (this.waitForTurn) {
                     this.nextTurnRight = val;
                 }
+                break;
+        }
+    }
+
+    setPlaybackRate() {
+        if (!this.currentVideo || this.encounterActive)
+            return;
+
+        switch (this.videoSpeed) {
+            case 1:
+                this.currentVideo.playbackRate = 1;
+                break;
+            case 2:
+                this.currentVideo.playbackRate = 3;
+                break;
+            case 3:
+                this.currentVideo.playbackRate = 6;
                 break;
         }
     }
@@ -179,11 +194,11 @@ class Path {
         this.currentVideo.loop = false;
 
         this.resolveEncounter();
-        this.currentVideo.playbackRate = this.videoSpeed;
+        this.setPlaybackRate();
     }
 
     nextVideo(right) {
-        var {nextLeft, nextRight} = this.currentVideoData;
+        var { nextLeft, nextRight } = this.currentVideoData;
 
         var nextId = right ? nextRight : nextLeft;
         var nextData = this.pathData.find(v => v.id == nextId);
@@ -266,7 +281,7 @@ class Path {
         console.log("Encounter!")
         this.encounterActive = true;
         this.lastEncounter = this.currentVideo.currentTime;
-        this.currentVideo.playbackRate = 0.5;
+        this.currentVideo.playbackRate = 1;
     }
 
     resolveEncounter(success) {
@@ -276,7 +291,7 @@ class Path {
         console.log("Encounter Resolved!")
         this.encounterActive = false;
         this.lastEncounter = this.currentVideo.currentTime;
-        this.currentVideo.playbackRate = this.videoSpeed;
+        this.setPlaybackRate();
     }
 
     render() {
