@@ -1,3 +1,10 @@
+const encounterRootFolder = "../videos/encounters"
+const encounterData = [
+    { name: "andi", video: "andi.webm", soundTime: 6.6, attackTime: 6.6 },
+    { name: "bernd", video: "bernd.webm", soundTime: 6.1, attackTime: 6.1 },
+    { name: "fabian", video: "fabian.webm", soundTime: 4.4, attackTime: 6 },
+]
+
 class Path {
 
     scene;
@@ -13,9 +20,15 @@ class Path {
     minTimeBetweenEncounters = 5;
     encounterActive = false;
     lastEncounter = 0;
+    currentEncounter;
+    currentEncounterIsLeft;
 
     get currentVideo() {
         return this.videoPlane.material.diffuseTexture ? this.videoPlane.material.diffuseTexture.video : null;
+    }
+
+    get currentEncounterVideo() {
+        return this.encounterPlane.material.diffuseTexture ? this.encounterPlane.material.diffuseTexture.video : null;
     }
 
     constructor() {
@@ -53,18 +66,37 @@ class Path {
         //        plane.rotation.z = Math.PI;
         //        plane.rotation.y = Math.PI;
         plane.material = new BABYLON.StandardMaterial("mat", this.scene);
-        plane.material.diffuseTexture = new BABYLON.VideoTexture("video", "../videos/hallway_small.mp4", this.scene, true);
         plane.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
         this.videoPlane = plane;
 
+        //Overlay Plane
+        var encounterPlane = BABYLON.MeshBuilder.CreatePlane("plane_overay", {
+            width: x, height: y
+        }, this.scene); // default plane
+        this.encounterPlane = encounterPlane;
+
+        const videoMaterial = new BABYLON.PBRMaterial('VideoMaterial', scene);
+        videoMaterial.albedoTexture = undefined;
+        // videoMaterial.reflectivityColor = BABYLON.Color3.Black();
+        // videoMaterial.reflectionColor = BABYLON.Color3.Black();
+        videoMaterial.albedoColor = BABYLON.Color3.Black();
+        videoMaterial.emissiveColor = BABYLON.Color3.White();
+        videoMaterial.unlit = true;
+        encounterPlane.material = videoMaterial;
+        encounterPlane.setEnabled(false);
+
+        // this.setEncounterOverlay(encounterData[0]);
+
+        // Rest
         this.addHUD()
 
         scene.onKeyboardObservable.add(kbInfo => kbInfo.type == BABYLON.KeyboardEventTypes.KEYUP && this.onKeyUp(kbInfo));
 
-
         fetch(`${this.videoFolder}/path.json`)
             .then(response => response.json())
-            .then(json => this.fetchedData(json));
+            .then(json => {
+                this.fetchedData(json)
+            });
 
         // TODO make magic
 
@@ -209,47 +241,41 @@ class Path {
     }
 
 
-    getOverlayPlane(file, scene) {
+    setEncounterOverlay(encounterData, isLeft) {
+        var videoSrc = `${encounterRootFolder}/${encounterData.video}`;
 
-        var plane = BABYLON.MeshBuilder.CreatePlane("plane_overay", {
-            width: 4, height: 2
-        }, scene); // default plane
+        if (this.encounterPlane.material.diffuseTexture) {
+            this.encounterPlane.material.diffuseTexture.dispose();
+        }
 
-        const video = document.createElement('video');
-        video.loop = true;
-        video.autoplay = true;
-        video.src = file;
+        var videoMaterial = this.encounterPlane.material;
 
-        const videoMaterial = new BABYLON.PBRMaterial('VideoMaterial', scene);
-        videoMaterial.albedoTexture = undefined;
-        videoMaterial.reflectivityColor = BABYLON.Color3.Black();
-        videoMaterial.reflectionColor = BABYLON.Color3.Black();
-        videoMaterial.albedoColor = BABYLON.Color3.Black();
-        videoMaterial.emissiveColor = BABYLON.Color3.White();
-        videoMaterial.unlit = true;
-
-        const videoTexture = new BABYLON.VideoTexture(
+        var overlayVideoTexture = new BABYLON.VideoTexture(
             'VideoTexture',
-            video,
-            scene,
+            videoSrc,
+            this.scene,
             true,
-            undefined,
-            undefined,
-            {
-                autoPlay: true,
-                loop: true,
-                autoUpdateTexture: true
-            }
         );
-        videoMaterial.emissiveTexture = videoTexture;
-        videoMaterial.opacityTexture = videoTexture;
-        // ground.material = videoMaterial;
 
-        plane.material = videoMaterial;
-        plane.material.diffuseTexture = videoTexture;
-        plane.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
+        videoMaterial.emissiveTexture = overlayVideoTexture;
+        videoMaterial.opacityTexture = overlayVideoTexture;
+        videoMaterial.diffuseTexture = overlayVideoTexture;
+        overlayVideoTexture.video.loop = false;
 
-        return plane;
+        this.encounterPlane.scaling.x = isLeft ? -1 : 1;
+
+        this.encounterPlane.setEnabled(true);
+    }
+
+    fadeoutEncounterOverlay() {
+        if (!this.encounterPlane.material.diffuseTexture)
+            return;
+
+        this.encounterPlane.setEnabled(false);
+    }
+
+    resetEncounterOverlay() {
+
     }
 
     addHUD() {
@@ -282,16 +308,34 @@ class Path {
         this.encounterActive = true;
         this.lastEncounter = this.currentVideo.currentTime;
         this.currentVideo.playbackRate = 1;
+
+        var encounter = encounterData[Math.floor(Math.random() * encounterData.length)];
+        this.currentEncounter = encounter;
+        this.currentEncounterIsLeft = Math.random() < 0.5;
+
+        this.setEncounterOverlay(encounter, this.currentEncounterIsLeft);
+
+        this.currentEncounterVideo.onloadeddata = () => {
+            this.encounterCallback = setTimeout(() => {
+                this.resolveEncounter(false);
+            }, this.currentEncounterVideo.duration * 1000);
+        }
     }
 
     resolveEncounter(success) {
         if (!this.encounterActive)
             return;
 
+        if (this.encounterCallback) {
+            clearTimeout(this.encounterCallback);
+        }
+
         console.log("Encounter Resolved!")
         this.encounterActive = false;
         this.lastEncounter = this.currentVideo.currentTime;
+        this.currentEncounter = null;
         this.setPlaybackRate();
+        this.fadeoutEncounterOverlay();
     }
 
     render() {
