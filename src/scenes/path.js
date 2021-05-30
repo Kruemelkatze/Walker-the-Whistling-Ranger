@@ -221,9 +221,11 @@ class Path {
                     break;
                 case 2:
                     if (whistlePattern[0] == 1 && whistlePattern[1] == -1) {
+                        this.hud.updateText("whistleInfo", "speed up", true);
                         this.speedUp();
                         return;
                     } else if (whistlePattern[0] == -1 && whistlePattern[1] == 1) {
+                        this.hud.updateText("whistleInfo", "slow down", true);
                         this.slowDown();
                         return;
                     } else if (whistlePattern[0] == 1 && whistlePattern[1] == 1) {
