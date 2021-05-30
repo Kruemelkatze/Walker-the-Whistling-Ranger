@@ -20,7 +20,7 @@ class Game {
             width: 4, height: 2
         }, scene); // default plane
         plane.material = new BABYLON.StandardMaterial("mat", scene);
-        plane.material.diffuseTexture = new BABYLON.VideoTexture("video", "../videos/hallway_small.mp4", scene, true);
+        plane.material.diffuseTexture = new BABYLON.VideoTexture("video", "videos/hallway_small.mp4", scene, true);
         plane.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
 
         this.createHUD();
@@ -29,13 +29,13 @@ class Game {
         // TODO make magic
 
         var ourGreen = BABYLON.Color3(102, 206, 16)
-        // this.overlay = this.getOverlayPlane("../videos/dancer1.webm", scene)
+        // this.overlay = this.getOverlayPlane("videos/dancer1.webm", scene)
 
         // misc
-        // this.overlay = this.getOverlayPlane("../videos/encounters/misc/Whistle.webm", scene)
+        // this.overlay = this.getOverlayPlane("videos/encounters/misc/Whistle.webm", scene)
 
         // encounters
-        this.overlay = this.getOverlayPlane("../videos/encounters/fabian.webm", scene)
+        this.overlay = this.getOverlayPlane("videos/encounters/fabian.webm", scene)
 
 
         this.scene = scene;

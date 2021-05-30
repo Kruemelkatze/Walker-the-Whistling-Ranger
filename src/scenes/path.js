@@ -1,4 +1,4 @@
-const encounterRootFolder = "../videos/encounters"
+const encounterRootFolder = "videos/encounters"
 const encounterData = [
     { name: "andi", video: "andi.webm", soundTime: 6.6, attackTime: 7 },
     { name: "bernd", video: "bernd.webm", soundTime: 6.1, attackTime: 6.4 },
@@ -9,7 +9,7 @@ class Path {
 
     scene;
     videoPlane;
-    videoFolder = "../videos/lakeside";
+    videoFolder = "videos/lakeside";
     pathData;
     currentVideoData;
     videoSpeed = 1;
@@ -110,7 +110,7 @@ class Path {
 
         // TODO make magic
 
-        //this.overlay = this.getOverlayPlane("../videos/dancer1.webm", scene)
+        //this.overlay = this.getOverlayPlane("videos/dancer1.webm", scene)
 
 
         console.log("START");

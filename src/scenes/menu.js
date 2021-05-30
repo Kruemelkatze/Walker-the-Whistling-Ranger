@@ -57,7 +57,7 @@ class Menu {
         //
         // var plane = BABYLON.MeshBuilder.CreatePlane("plane", {width: x, height: y}, this.scene); // default plane
         // plane.material = new BABYLON.StandardMaterial("mat", this.scene);
-        // plane.material.diffuseTexture = new BABYLON.VideoTexture("video", "../videos/hallway_small_rev.mp4", this.scene, true);
+        // plane.material.diffuseTexture = new BABYLON.VideoTexture("video", "videos/hallway_small_rev.mp4", this.scene, true);
         // plane.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
 
         // this.addOverlay(scene, x, y);
@@ -122,11 +122,11 @@ class Menu {
     //     const video = document.createElement('video');
     //     video.loop = true;
     //     video.autoplay = true;
-    //     video.src = "../videos/encounters/misc/Come_Up.webm";
+    //     video.src = "videos/encounters/misc/Come_Up.webm";
     //
     //     video.onplay = () => {
     //         setTimeout(() => {
-    //             video.src = "../videos/encounters/misc/Whistle.webm";
+    //             video.src = "videos/encounters/misc/Whistle.webm";
     //         }, 4400);
     //     }
     //
@@ -174,9 +174,11 @@ class Menu {
     }
 
     dispose() {
-        this.overlayPlane.material.diffuseTexture.dispose();
-        this.overlayPlane.material.dispose();
-        this.overlayPlane.material = null;
+        if (this.overlayPlane) {
+            this.overlayPlane.material.diffuseTexture.dispose();
+            this.overlayPlane.material.dispose();
+            this.overlayPlane.material = null;
+        }
         this.whistleHandler.disableWhistleHandler();
         this.scene.dispose();
     }
