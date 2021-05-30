@@ -32,12 +32,12 @@ var theBuffer = null;
 var DEBUGCANVAS = null;
 var mediaStreamSource = null;
 var detectorElem,
-	canvasElem,
-	waveCanvas,
-	pitchElem,
-	noteElem,
-	detuneElem,
-	detuneAmount;
+    canvasElem,
+    waveCanvas,
+    pitchElem,
+    noteElem,
+    detuneElem,
+    detuneAmount;
 let data_buffer; // windowing data --
 let lastFrameTime
 
@@ -46,11 +46,11 @@ var autoUpdate = false;
 var onPitchDetected = [];
 
 function addListener(listener) {
-	onPitchDetected.push(listener);
+    onPitchDetected.push(listener);
 }
 
 function removeListener(listener) {
-	onPitchDetected = onPitchDetected.filter(l => l != listener);
+    onPitchDetected = onPitchDetected.filter(l => l != listener);
 }
 
 /*window.onload = function() {
@@ -106,36 +106,37 @@ function removeListener(listener) {
 
 }*/
 
-startDetection = function() {
-	audioContext = new AudioContext();
-	MAX_SIZE = Math.max(4,Math.floor(audioContext.sampleRate/5000));	// corresponds to a 5kHz signal
-	pitchElem = document.getElementById( "pitch" );
-	getUserMedia(
-		{
-					"audio": {
-							"mandatory": {
-									"googEchoCancellation": "false",
-									"googAutoGainControl": "false",
-									"googNoiseSuppression": "true",
-									"googHighpassFilter": "false"
-							},
-							"optional": []
-					},
-			}, gotStream);
+startDetection = function () {
+    audioContext = new AudioContext();
+    MAX_SIZE = Math.max(4, Math.floor(audioContext.sampleRate / 5000));	// corresponds to a 5kHz signal
+    pitchElem = document.getElementById("pitch");
+    getUserMedia(
+        {
+            "audio": {
+                "mandatory": {
+                    "googEchoCancellation": "false",
+                    "googAutoGainControl": "false",
+                    "googNoiseSuppression": "true",
+                    "googHighpassFilter": "false"
+                },
+                "optional": []
+            },
+        }, gotStream);
 
-			data_buffer = [];
+    data_buffer = [];
 }
 
 function error() {
-    alert('Stream generation failed.');
+    // alert('Stream generation failed.');
+    console.log("Stream generation failed.")
 }
 
 function getUserMedia(dictionary, callback) {
     try {
         navigator.getUserMedia =
-        	navigator.getUserMedia ||
-        	navigator.webkitGetUserMedia ||
-        	navigator.mozGetUserMedia;
+            navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia;
         navigator.getUserMedia(dictionary, callback, error);
     } catch (e) {
         alert('getUserMedia threw exception :' + e);
@@ -149,28 +150,28 @@ function gotStream(stream) {
     // Connect it to the destination.
     analyser = audioContext.createAnalyser();
     analyser.fftSize = 2048;
-    mediaStreamSource.connect( analyser );
+    mediaStreamSource.connect(analyser);
     updatePitch();
 }
 
 function toggleOscillator() {
     if (isPlaying) {
         //stop playing and return
-        sourceNode.stop( 0 );
+        sourceNode.stop(0);
         sourceNode = null;
         analyser = null;
         isPlaying = false;
-		if (!window.cancelAnimationFrame)
-			window.cancelAnimationFrame = window.webkitCancelAnimationFrame;
-        window.cancelAnimationFrame( rafID );
+        if (!window.cancelAnimationFrame)
+            window.cancelAnimationFrame = window.webkitCancelAnimationFrame;
+        window.cancelAnimationFrame(rafID);
         return "play oscillator";
     }
     sourceNode = audioContext.createOscillator();
 
     analyser = audioContext.createAnalyser();
     analyser.fftSize = 2048;
-    sourceNode.connect( analyser );
-    analyser.connect( audioContext.destination );
+    sourceNode.connect(analyser);
+    analyser.connect(audioContext.destination);
     sourceNode.start(0);
     isPlaying = true;
     isLiveInput = false;
@@ -182,16 +183,16 @@ function toggleOscillator() {
 function toggleLiveInput() {
     if (isPlaying) {
         //stop playing and return
-        sourceNode.stop( 0 );
+        sourceNode.stop(0);
         sourceNode = null;
         analyser = null;
         isPlaying = false;
-		if (!window.cancelAnimationFrame)
-			window.cancelAnimationFrame = window.webkitCancelAnimationFrame;
-        window.cancelAnimationFrame( rafID );
+        if (!window.cancelAnimationFrame)
+            window.cancelAnimationFrame = window.webkitCancelAnimationFrame;
+        window.cancelAnimationFrame(rafID);
     }
     getUserMedia(
-    	{
+        {
             "audio": {
                 "mandatory": {
                     "googEchoCancellation": "false",
@@ -207,13 +208,13 @@ function toggleLiveInput() {
 function togglePlayback() {
     if (isPlaying) {
         //stop playing and return
-        sourceNode.stop( 0 );
+        sourceNode.stop(0);
         sourceNode = null;
         analyser = null;
         isPlaying = false;
-		if (!window.cancelAnimationFrame)
-			window.cancelAnimationFrame = window.webkitCancelAnimationFrame;
-        window.cancelAnimationFrame( rafID );
+        if (!window.cancelAnimationFrame)
+            window.cancelAnimationFrame = window.webkitCancelAnimationFrame;
+        window.cancelAnimationFrame(rafID);
         return "start";
     }
 
@@ -223,9 +224,9 @@ function togglePlayback() {
 
     analyser = audioContext.createAnalyser();
     analyser.fftSize = 2048;
-    sourceNode.connect( analyser );
-    analyser.connect( audioContext.destination );
-    sourceNode.start( 0 );
+    sourceNode.connect(analyser);
+    analyser.connect(audioContext.destination);
+    sourceNode.start(0);
     isPlaying = true;
     isLiveInput = false;
     updatePitch();
@@ -236,21 +237,21 @@ function togglePlayback() {
 var rafID = null;
 var tracks = null;
 var buflen = 2048;
-var buf = new Float32Array( buflen );
+var buf = new Float32Array(buflen);
 
 var noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
-function noteFromPitch( frequency ) {
-	var noteNum = 12 * (Math.log( frequency / 440 )/Math.log(2) );
-	return Math.round( noteNum ) + 69;
+function noteFromPitch(frequency) {
+    var noteNum = 12 * (Math.log(frequency / 440) / Math.log(2));
+    return Math.round(noteNum) + 69;
 }
 
-function frequencyFromNoteNumber( note ) {
-	return 440 * Math.pow(2,(note-69)/12);
+function frequencyFromNoteNumber(note) {
+    return 440 * Math.pow(2, (note - 69) / 12);
 }
 
-function centsOffFromPitch( frequency, note ) {
-	return Math.floor( 1200 * Math.log( frequency / frequencyFromNoteNumber( note ))/Math.log(2) );
+function centsOffFromPitch(frequency, note) {
+    return Math.floor(1200 * Math.log(frequency / frequencyFromNoteNumber(note)) / Math.log(2));
 }
 
 // this is the previously used pitch detection algorithm.
@@ -314,87 +315,96 @@ function autoCorrelate( buf, sampleRate ) {
 }
 */
 
-function autoCorrelate( buf, sampleRate ) {
-	// Implements the ACF2+ algorithm
-	var SIZE = buf.length;
-	var rms = 0;
+function autoCorrelate(buf, sampleRate) {
+    // Implements the ACF2+ algorithm
+    var SIZE = buf.length;
+    var rms = 0;
 
-	for (var i=0;i<SIZE;i++) {
-		var val = buf[i];
-		rms += val*val;
-	}
-	rms = Math.sqrt(rms/SIZE);
-	if (rms<0.01) // not enough signal
-		return -1;
+    for (var i = 0; i < SIZE; i++) {
+        var val = buf[i];
+        rms += val * val;
+    }
+    rms = Math.sqrt(rms / SIZE);
+    if (rms < 0.01) // not enough signal
+        return -1;
 
-	var r1=0, r2=SIZE-1, thres=0.2;
-	for (var i=0; i<SIZE/2; i++)
-		if (Math.abs(buf[i])<thres) { r1=i; break; }
-	for (var i=1; i<SIZE/2; i++)
-		if (Math.abs(buf[SIZE-i])<thres) { r2=SIZE-i; break; }
+    var r1 = 0, r2 = SIZE - 1, thres = 0.2;
+    for (var i = 0; i < SIZE / 2; i++)
+        if (Math.abs(buf[i]) < thres) {
+            r1 = i;
+            break;
+        }
+    for (var i = 1; i < SIZE / 2; i++)
+        if (Math.abs(buf[SIZE - i]) < thres) {
+            r2 = SIZE - i;
+            break;
+        }
 
-	buf = buf.slice(r1,r2);
-	SIZE = buf.length;
+    buf = buf.slice(r1, r2);
+    SIZE = buf.length;
 
-	var c = new Array(SIZE).fill(0);
-	for (var i=0; i<SIZE; i++)
-		for (var j=0; j<SIZE-i; j++)
-			c[i] = c[i] + buf[j]*buf[j+i];
+    var c = new Array(SIZE).fill(0);
+    for (var i = 0; i < SIZE; i++)
+        for (var j = 0; j < SIZE - i; j++)
+            c[i] = c[i] + buf[j] * buf[j + i];
 
-	var d=0; while (c[d]>c[d+1]) d++;
-	var maxval=-1, maxpos=-1;
-	for (var i=d; i<SIZE; i++) {
-		if (c[i] > maxval) {
-			maxval = c[i];
-			maxpos = i;
-		}
-	}
-	var T0 = maxpos;
+    var d = 0;
+    while (c[d] > c[d + 1]) d++;
+    var maxval = -1, maxpos = -1;
+    for (var i = d; i < SIZE; i++) {
+        if (c[i] > maxval) {
+            maxval = c[i];
+            maxpos = i;
+        }
+    }
+    var T0 = maxpos;
 
-	var x1=c[T0-1], x2=c[T0], x3=c[T0+1];
-	a = (x1 + x3 - 2*x2)/2;
-	b = (x3 - x1)/2;
-	if (a) T0 = T0 - b/(2*a);
+    var x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
+    a = (x1 + x3 - 2 * x2) / 2;
+    b = (x3 - x1) / 2;
+    if (a) T0 = T0 - b / (2 * a);
 
-	return sampleRate/T0;
+    return sampleRate / T0;
 }
 
 function getPitch() {
-	analyser.getFloatTimeDomainData( buf );
-	var ac = autoCorrelate( buf, audioContext.sampleRate );
+    analyser.getFloatTimeDomainData(buf);
+    var ac = autoCorrelate(buf, audioContext.sampleRate);
 
-	return ac;
+    return ac;
 }
 
-function updatePitch( time ) {
+function updatePitch(time) {
 
-	if(!autoUpdate || !pitchElem)
-		return;
+    if (!autoUpdate || !pitchElem)
+        return;
 
-	var cycles = new Array;
-	analyser.getFloatTimeDomainData( buf );
-	var ac = autoCorrelate( buf, audioContext.sampleRate );
-	// TODO: Paint confidence meter on canvasElem here.
- 	if (ac == -1) {
- 		pitchElem.innerText = "--" ;
- 	} else {
+    var cycles = new Array;
+    analyser.getFloatTimeDomainData(buf);
+    var ac = autoCorrelate(buf, audioContext.sampleRate);
+    // TODO: Paint confidence meter on canvasElem here.
+    if (ac == -1) {
+        pitchElem.innerText = "--";
+    } else {
 
-		pitch = ac;
-		// windowing in an array ..
-		data_buffer.push(ac);
-		if (data_buffer.length > 10) data_buffer.shift();
-		// averaging the
-		avg = data_buffer.reduce((a, b) => { return a + b; })/data_buffer.length;
-		// estimating the frame set
-		let frametime = Date.now() - lastFrameTime;
-		lastFrameTime = Date.now();
-		// showing the log base 2 of the frequency and the sampling time. 
-	 	pitchElem.innerText = Math.round(Math.log2( avg )*100)/100 + " - " + frametime; // log of the frequencey - TODO: make nice ...
-	}
+        pitch = ac;
+        // windowing in an array ..
+        data_buffer.push(ac);
+        if (data_buffer.length > 10) data_buffer.shift();
+        // averaging the
+        avg = data_buffer.reduce((a, b) => {
+            return a + b;
+        }) / data_buffer.length;
+        // estimating the frame set
+        let frametime = Date.now() - lastFrameTime;
+        lastFrameTime = Date.now();
+        // showing the log base 2 of the frequency and the sampling time.
+        pitchElem.innerText = Math.round(Math.log2(avg) * 100) / 100 + " - " + frametime; // log of the frequencey - TODO: make nice ...
+    }
 
-	onPitchDetected.forEach(l => l());
+    onPitchDetected.forEach(l => l());
 
-	if (!window.requestAnimationFrame)
-		window.requestAnimationFrame = window.webkitRequestAnimationFrame;
-	rafID = window.requestAnimationFrame( updatePitch );
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = window.webkitRequestAnimationFrame;
+    rafID = window.requestAnimationFrame(updatePitch);
 }
