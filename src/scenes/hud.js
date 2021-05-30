@@ -6,7 +6,7 @@ class Hud {
         this.fps = 30;
     }
 
-    createTextElement(key, color="#FFFFFF", msg="", padLeft=0, padTop=0, padRight=0, padBottom=0) {
+    createTextElementPos(key, color="#FFFFFF", msg="", left=0, top=0) {
         let textElement = new BABYLON.GUI.TextBlock(key);
         textElement.text = msg;
         textElement.fontSize = 50;
@@ -15,13 +15,67 @@ class Hud {
         textElement.shadowBlur = 3;
         textElement.shadowColor = "#000";
         textElement.textVerticalAlignment = BABYLON.GUI.TextBlock.VERTICAL_ALIGNMENT_TOP;
-        textElement.textHorizontalAlignment = BABYLON.GUI.TextBlock.HORIZONTAL_ALIGNMENT_RIGHT;
-        textElement.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-        textElement.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-        textElement.paddingLeft = `${padLeft}px`;
-        textElement.paddingRight = `${padRight}px`;
-        textElement.paddingTop = `${padTop}px`;
-        textElement.paddingBottom = `${padBottom}px`;
+        textElement.textHorizontalAlignment = BABYLON.GUI.TextBlock.HORIZONTAL_ALIGNMENT_LEFT;
+        // textElement.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+        // textElement.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        // textElement.left = left;
+        // textElement.top = top;
+        // textElement.transformCenterX = 1;
+        // textElement.transformCenterY = 1;
+        // if (padLeft) textElement.paddingLeft = `0px`;
+        // if (padTop) textElement.paddingTop = `0px`;
+        // if (padRight) textElement.paddingRight = `${padRight}px`;
+        // if (padBottom) textElement.paddingBottom = `${padBottom}px`;
+        this.hud.addControl(textElement);
+    }
+
+    // alignX = left|right|center
+    // alignY = top|bottom|center
+    createTextElementAlign(key, color="#FFFFFF", msg="", alignX="left", alignY="top") {
+        let textElement = new BABYLON.GUI.TextBlock(key);
+        textElement.text = msg;
+        textElement.fontSize = 50;
+        textElement.color = color;
+        textElement.fontFamily = 'New Rocker';
+        textElement.shadowBlur = 3;
+        textElement.shadowColor = "#000";
+
+        let xAlign = null;
+        let yAlign = null;
+
+        switch(alignX) {
+            case "left":
+                xAlign = BABYLON.GUI.TextBlock.HORIZONTAL_ALIGNMENT_LEFT;
+                break;
+            case "right":
+                xAlign = BABYLON.GUI.TextBlock.HORIZONTAL_ALIGNMENT_RIGHT;
+                break;
+            case "center":
+                xAlign = BABYLON.GUI.TextBlock.HORIZONTAL_ALIGNMENT_CENTER;
+                break;
+        }
+        switch(alignY) {
+            case "top":
+                yAlign = BABYLON.GUI.TextBlock.VERTICAL_ALIGNMENT_TOP;
+                break;
+            case "bottom":
+                yAlign = BABYLON.GUI.TextBlock.VERTICAL_ALIGNMENT_BOTTOM;
+                break;
+            case "center":
+                yAlign = BABYLON.GUI.TextBlock.VERTICAL_ALIGNMENT_CENTER;
+                break;
+        }
+
+        textElement.textHorizontalAlignment = xAlign;
+        textElement.textVerticalAlignment = yAlign;
+        // textElement.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+        // textElement.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+
+        textElement.paddingLeft = `5px`;
+        textElement.paddingTop = `5px`;
+        textElement.paddingRight = `5px`;
+        textElement.paddingBottom = `5px`;
+
         this.hud.addControl(textElement);
     }
 
@@ -36,6 +90,7 @@ class Hud {
 
     updateText(key, text="", fadeOut=false) {
         this.getTextControl(key).text = text;
+        this.getTextControl(key).animations = [];
         this.getTextControl(key).alpha = 1;
         if (fadeOut) {
             let secs = 2 * this.fps;

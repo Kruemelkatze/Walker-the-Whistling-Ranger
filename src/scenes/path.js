@@ -90,8 +90,11 @@ class Path {
 
         // Rest
         this.hud = new Hud(this.scene);
-        this.hud.createTextElement("whistleInfo", "#FFFFFF", "", 0, 0, 200, 200);
-        // this.hud.updateText("whistleInfo", "testtt", true);
+        this.hud.createTextElementAlign("whistleInfo", "#FFFFFF", "",  "right", "bottom");
+        this.hud.createTextElementAlign("userInfo", "#FFFFFF", "", "right", "top");
+        // this.hud.createTextElementAlign("test", "#FFFFFF", "TEST", "left", "top");
+        // this.hud.createTextElementPos("test", "#FFFFFF", "TEST", 0, 0);
+        // this.hud.updateText("userInfo", "testtt", true);
 
         scene.onKeyboardObservable.add(kbInfo => kbInfo.type == BABYLON.KeyboardEventTypes.KEYUP && this.onKeyUp(kbInfo));
 
@@ -324,7 +327,7 @@ class Path {
         if (this.encounterActive)
             return;
 
-        this.hud.updateText("whistleInfo", "You are getting attacked!", true);
+        this.hud.updateText("userInfo", "You are getting attacked!", true);
         console.log("Encounter!")
         this.encounterActive = true;
         this.lastEncounter = this.currentVideo.currentTime;
@@ -351,7 +354,7 @@ class Path {
             clearTimeout(this.encounterCallback);
         }
 
-        this.hud.updateText("whistleInfo", "You beat the foe!", true);
+        this.hud.updateText("userInfo", "You beat the foe!", true);
         console.log("Encounter Resolved!")
         this.encounterActive = false;
         this.lastEncounter = this.currentVideo.currentTime;
@@ -365,7 +368,7 @@ class Path {
     }
 
     penalty() {
-        this.hud.updateText("whistleInfo", "You got hit!", true);
+        this.hud.updateText("userInfo", "You got hit!", true);
         console.log("Penalty!")
     }
 
@@ -383,11 +386,12 @@ class Path {
             this.nextVideo(this.nextTurnRight);
         } else if (vid && vid.duration - vid.currentTime < 5) {
             if (!this.waitForTurn) {
-                this.hud.updateText("whistleInfo", "Choose a path...");
+                this.hud.updateText("userInfo", "Choose a path...");
                 console.log("waiting for turn")
             }
             this.waitForTurn = true;
         } else {
+            this.hud.updateText("userInfo", "");
             this.waitForTurn = false;
         }
 
