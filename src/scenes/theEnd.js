@@ -12,6 +12,9 @@ class TheEnd {
         camera.setTarget(BABYLON.Vector3.Zero());
 
         this.scene = scene;
+
+        this.hud = new Hud(this.scene);
+        this.hud.createTextElementAlign("whistleInfo", "#FFFFFF", "Game Over",  "center", "center");
     }
 
     onLoad() {

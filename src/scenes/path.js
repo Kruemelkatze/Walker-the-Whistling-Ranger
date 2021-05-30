@@ -385,7 +385,7 @@ class Path {
         this.hud.updateText("heartInfo", this.getHeartsText());
         console.log("Penalty!")
         if (this.remainingHearts == 0) {
-            this.hud.createTextElementAlign("lostInfo", "#FFFFFF", "You die!", "center", "center");
+            this.hud.createTextElementAlign("lostInfo", "#FF0000", "You die!", "center", "center");
             this.gameOver = true;
             setTimeout(() => {
                 setNewScene(end);
