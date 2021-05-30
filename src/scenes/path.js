@@ -383,6 +383,13 @@ class Path {
         this.remainingHearts--;
         this.hud.updateText("heartInfo", this.getHeartsText());
         console.log("Penalty!")
+        if (this.remainingHearts == 0) {
+            this.hud.createTextElementAlign("lostInfo", "#FFFFFF", "You die!", "center", "center");
+            setTimeout(() => {
+                setNewScene(end);
+            }, 5000
+            );
+        }
     }
 
     render() {

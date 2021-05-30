@@ -34,7 +34,7 @@ class Hud {
     createTextElementAlign(key, color="#FFFFFF", msg="", alignX="left", alignY="top") {
         let textElement = new BABYLON.GUI.TextBlock(key);
         textElement.text = msg;
-        textElement.fontSize = 50;
+        textElement.fontSize = 64;
         textElement.color = color;
         textElement.fontFamily = 'New Rocker';
         textElement.shadowBlur = 3;
