@@ -18,8 +18,8 @@ class Hud {
         textElement.textHorizontalAlignment = BABYLON.GUI.TextBlock.HORIZONTAL_ALIGNMENT_LEFT;
         // textElement.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
         // textElement.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-        // textElement.left = left;
-        // textElement.top = top;
+        textElement.left = left;
+        textElement.top = top;
         // textElement.transformCenterX = 1;
         // textElement.transformCenterY = 1;
         // if (padLeft) textElement.paddingLeft = `0px`;

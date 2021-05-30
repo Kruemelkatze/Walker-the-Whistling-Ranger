@@ -97,7 +97,7 @@ class Path {
         this.hud.createTextElementAlign("heartInfo", "#FFFFFF", this.getHeartsText(), "left", "top");
 
         // this.hud.createTextElementAlign("test", "#FFFFFF", "TEST", "left", "top");
-        // this.hud.createTextElementPos("test", "#FFFFFF", "TEST", 0, 0);
+        // this.hud.createTextElementPos("test", "#FFFFFF", "TEST", 200, 200);
         // this.hud.updateText("userInfo", "testtt", true);
 
         scene.onKeyboardObservable.add(kbInfo => kbInfo.type == BABYLON.KeyboardEventTypes.KEYUP && this.onKeyUp(kbInfo));
