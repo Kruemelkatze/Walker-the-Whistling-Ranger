@@ -23,7 +23,7 @@ class Instructions {
         var y = d * Math.tan(fov);
         var x = y * aspectRatio;
 
-        var plane = BABYLON.MeshBuilder.CreatePlane("plane", {width: x, height: y}, this.scene); // default plane
+        var plane = BABYLON.MeshBuilder.CreatePlane("plane", { width: x, height: y }, this.scene); // default plane
         plane.material = new BABYLON.StandardMaterial("mat", this.scene);
         plane.material.diffuseTexture = new BABYLON.VideoTexture("video", "videos/Walker-intro.mp4", this.scene, true);
         plane.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
@@ -35,6 +35,16 @@ class Instructions {
         });
 
         scene.onKeyboardObservable.add(kbInfo => kbInfo.type == BABYLON.KeyboardEventTypes.KEYUP && this.onKeyUp(kbInfo));
+
+        this.hud = new Hud(this.scene);
+        this.hud.createTextElementAlign("whistleInfo", "#FFFFFF", "Whistle to skip.", "center", "bottom");
+
+        this.whistleHandler = new WhistleHandler();
+        this.whistleHandler.enableWhistleHandler((whistlePattern) => {
+            if (whistlePattern.length) {
+                setNewScene(menu);
+            }
+        });
 
     }
 
@@ -60,5 +70,7 @@ class Instructions {
 
     dispose() {
         this.scene.dispose();
+        if (this.whistleHandler)
+            this.whistleHandler.disableWhistleHandler();
     }
 }

@@ -3,7 +3,7 @@ class TheEndFail {
         this.scene;
     }
 
-    createScene () {
+    createScene() {
         // Create the scene space
         var scene = new BABYLON.Scene(engine);
 
@@ -14,7 +14,14 @@ class TheEndFail {
         this.scene = scene;
 
         this.hud = new Hud(this.scene);
-        this.hud.createTextElementAlign("whistleInfo", "#FFFFFF", "You failed...",  "center", "center");
+        this.hud.createTextElementAlign("whistleInfo", "#FFFFFF", "You failed...\n\nWhistle to continue.", "center", "center");
+
+        this.whistleHandler = new WhistleHandler();
+        this.whistleHandler.enableWhistleHandler((whistlePattern) => {
+            if (whistlePattern.length) {
+                setNewScene(menu);
+            }
+        });
     }
 
     onLoad() {
@@ -30,6 +37,9 @@ class TheEndFail {
 
     dispose() {
         this.scene.dispose();
+
+        if (this.whistleHandler)
+            this.whistleHandler.disableWhistleHandler();
     }
 
 }
