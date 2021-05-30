@@ -25,7 +25,7 @@ class Instructions {
 
         var plane = BABYLON.MeshBuilder.CreatePlane("plane", { width: x, height: y }, this.scene); // default plane
         plane.material = new BABYLON.StandardMaterial("mat", this.scene);
-        plane.material.diffuseTexture = new BABYLON.VideoTexture("video", "videos/Walker-intro.mp4", this.scene, true);
+        plane.material.diffuseTexture = new BABYLON.VideoTexture("video", "videos/intro/walkerintro.m4v", this.scene, true);
         plane.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
 
         var music = new BABYLON.Sound("Music", "audio/background_athmosphere.mp3", scene, null, {
