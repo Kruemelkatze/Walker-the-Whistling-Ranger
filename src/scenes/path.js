@@ -1,7 +1,7 @@
 const encounterRootFolder = "../videos/encounters"
 const encounterData = [
-    { name: "andi", video: "andi.webm", soundTime: 6.6, attackTime: 6.6 },
-    { name: "bernd", video: "bernd.webm", soundTime: 6.1, attackTime: 6.1 },
+    { name: "andi", video: "andi.webm", soundTime: 6.6, attackTime: 7 },
+    { name: "bernd", video: "bernd.webm", soundTime: 6.1, attackTime: 6.4 },
     { name: "fabian", video: "fabian.webm", soundTime: 4.4, attackTime: 6 },
 ]
 
@@ -92,6 +92,9 @@ class Path {
         this.hud = new Hud(this.scene);
         this.hud.createTextElementAlign("whistleInfo", "#FFFFFF", "",  "right", "bottom");
         this.hud.createTextElementAlign("userInfo", "#FFFFFF", "", "right", "top");
+        this.remainingHearts = 3;
+        this.hud.createTextElementAlign("heartInfo", "#FFFFFF", this.getHeartsText(), "left", "top");
+
         // this.hud.createTextElementAlign("test", "#FFFFFF", "TEST", "left", "top");
         // this.hud.createTextElementPos("test", "#FFFFFF", "TEST", 0, 0);
         // this.hud.updateText("userInfo", "testtt", true);
@@ -139,6 +142,14 @@ class Path {
                 }
                 break;
         }
+    }
+
+    getHeartsText() {
+        let txt = "";
+        for (let i = 0; i<this.remainingHearts; i++) {
+            txt += "♡";
+        }
+        return txt;
     }
 
     speedUp() {
@@ -342,7 +353,7 @@ class Path {
         this.currentEncounterVideo.onloadeddata = () => {
             this.encounterCallback = setTimeout(() => {
                 this.resolveEncounter(false);
-            }, this.currentEncounterVideo.duration * 1000);
+            }, encounter.attackTime * 1000);
         }
     }
 
@@ -369,6 +380,8 @@ class Path {
 
     penalty() {
         this.hud.updateText("userInfo", "You got hit!", true);
+        this.remainingHearts--;
+        this.hud.updateText("heartInfo", this.getHeartsText());
         console.log("Penalty!")
     }
 
