@@ -103,6 +103,10 @@ class Hud {
         }
     }
 
+    updateColor(key, color) {
+        this.getTextControl(key).color = color;
+    }
+
     fadeOutText(key, num_frames) {
         var animationHideText = new BABYLON.Animation(key + "_anim", "alpha", this.fps, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
         var keys = [];

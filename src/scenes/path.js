@@ -231,14 +231,14 @@ class Path {
                         console.log("defend right");
 
                         if (this.currentEncounterIsLeft === false)
-                            this.resolveEncounter(true);    // TODO check which pattern is expected to solve the current encounter
+                            this.resolveEncounter(true);
                         return;
                     } else if (whistlePattern[0] == -1 && whistlePattern[1] == -1) {
                         this.hud.updateText("whistleInfo", "defend left", true);
                         console.log("defend left");
 
                         if (this.currentEncounterIsLeft === true)
-                            this.resolveEncounter(true);    // TODO check which pattern is expected to solve the current encounter
+                            this.resolveEncounter(true);
                         return;
                     }
                     break;
