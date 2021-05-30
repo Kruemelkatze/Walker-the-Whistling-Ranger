@@ -13,7 +13,7 @@ let endfail = new TheEndFail();
 let endsuccess = new TheEndSuccess();
 
 let currentScene = null;
-setNewScene(menu);
+
 
 function handleKeyPress(event) {
     if (document.querySelector("#userInfo")) document.querySelector("#userInfo").remove();
@@ -86,4 +86,9 @@ engine.runRenderLoop(function () {
 window.addEventListener("resize", function () {
     engine.resize();
 });
+
+function start() {
+    document.querySelector("#overlay").style.display = "none";
+    setNewScene(menu);
+}
 
