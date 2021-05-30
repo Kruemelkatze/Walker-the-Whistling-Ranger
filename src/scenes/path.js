@@ -96,6 +96,12 @@ class Path {
         this.gameOver = false;
         this.hud.createTextElementAlign("heartInfo", "#FFFFFF", this.getHeartsText(), "left", "top");
 
+        // instruction image
+        let scale = 0.15;
+        let imgW = 1300 * scale;
+        let imgH = 1800 * scale;
+        this.hud.createImage("myimage", "images/instructions.png", 20, cvas.height - 300, imgW, imgH);
+
         // this.hud.createTextElementAlign("test", "#FFFFFF", "TEST", "left", "top");
         // this.hud.createTextElementPos("test", "#FFFFFF", "TEST", 200, 200);
         // this.hud.updateText("userInfo", "testtt", true);
