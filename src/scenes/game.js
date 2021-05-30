@@ -1,6 +1,7 @@
 class Game {
     constructor() {
         this.scene;
+        this.hud;
      }
 
     /**
@@ -22,7 +23,8 @@ class Game {
         plane.material.diffuseTexture = new BABYLON.VideoTexture("video", "../videos/hallway_small.mp4", scene, true);
         plane.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
 
-        this.addHUD()
+        this.createHUD();
+        this.getTextControl("whistleInfo").text = "tesst";
 
         // TODO make magic
 
@@ -83,7 +85,41 @@ class Game {
         return plane;
     }
 
-    addHUD() {
+    getTextControl(key) {
+        for (let e of this.hud.getDescendants()) {
+            if (e.name == key) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    createTextElement(key, color="#FFFFFF", msg="", padLeft=0, padTop=0, padRight=0, padBottom=0) {
+        let textElement = new BABYLON.GUI.TextBlock(key);
+        textElement.text = msg;
+        textElement.fontSize = 50;
+        textElement.color = color;
+        textElement.fontFamily = 'New Rocker';
+        textElement.shadowBlur = 3;
+        textElement.shadowColor = "#000";
+        textElement.textVerticalAlignment = BABYLON.GUI.TextBlock.VERTICAL_ALIGNMENT_TOP;
+        textElement.textHorizontalAlignment = BABYLON.GUI.TextBlock.HORIZONTAL_ALIGNMENT_RIGHT;
+        textElement.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+        textElement.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+        textElement.paddingLeft = `${padLeft}px`;
+        textElement.paddingRight = `${padRight}px`;
+        textElement.paddingTop = `${padTop}px`;
+        textElement.paddingBottom = `${padBottom}px`;
+        return textElement;
+    }
+
+    createHUD() {
+        // GUI
+        this.hud = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+        var whistleText = this.createTextElement("whistleInfo", "#FFFFFF", "", 0, 0, 200, 200);
+
+        this.hud.addControl(whistleText);
 
     }
 
@@ -123,6 +159,7 @@ class Game {
      */
     dispose() {
         // TODO cleanup
+        this.hud.dispose();
         this.scene.dispose();
     }
 
