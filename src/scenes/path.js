@@ -301,6 +301,7 @@ class Path {
         videoMaterial.opacityTexture = overlayVideoTexture;
         videoMaterial.diffuseTexture = overlayVideoTexture;
         overlayVideoTexture.video.loop = false;
+        overlayVideoTexture.video.muted = true;
 
         this.encounterPlane.scaling.x = isLeft ? -1 : 1;
 

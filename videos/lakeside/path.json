@@ -1,51 +1,93 @@
 [
     {
         "id": "L_1",
-        "videoFile": "L_1-small.mp4",
+        "videoFile": "L_1.m4v",
         "nextLeft": "L_2_2",
         "nextRight": "L_2_1",
         "events": []
     },
     {
         "id": "L_2_1",
-        "videoFile": "L_2_1-small.mp4",
+        "videoFile": "L_2_1.m4v",
         "nextLeft": "L_2_1_2",
         "nextRight": "L_2_1_1",
         "events": []
     },
     {
         "id": "L_2_2",
-        "videoFile": "L_2_2-small.mp4",
+        "videoFile": "L_2_2.m4v",
         "nextLeft": "L_2_2_2",
         "nextRight": "L_2_2_1",
         "events": []
     },
     {
         "id": "L_2_1_1",
-        "videoFile": "L_2_1_1-small.mp4",
-        "nextLeft": "",
-        "nextRight": "",
+        "videoFile": "L_2_1_1.m4v",
+        "nextLeft": "L_3_2",
+        "nextRight": "L_3_1",
         "events": []
     },
     {
         "id": "L_2_1_2",
-        "videoFile": "L_2_1_2-small.mp4",
-        "nextLeft": "",
-        "nextRight": "",
+        "videoFile": "L_2_1_2.m4v",
+        "nextLeft": "L_3_4",
+        "nextRight": "L_3_3",
         "events": []
     },
     {
         "id": "L_2_2_1",
-        "videoFile": "L_2_2_1-small.mp4",
-        "nextLeft": "",
-        "nextRight": "",
+        "videoFile": "L_2_2_1.m4v",
+        "nextLeft": "L_3_4",
+        "nextRight": "L_3_3",
         "events": []
     },
     {
         "id": "L_2_2_2",
-        "videoFile": "L_2_2_2-small.mp4",
+        "videoFile": "L_2_2_2.m4v",
+        "nextLeft": "L_3_6",
+        "nextRight": "L_3_5",
+        "events": []
+    },
+    {
+        "id": "L_3_1",
+        "videoFile": "L_3_1.m4v",
         "nextLeft": "",
         "nextRight": "",
-        "events": []
+        "end": true
+    },
+    {
+        "id": "L_3_2",
+        "videoFile": "L_3_2.m4v",
+        "nextLeft": "",
+        "nextRight": "",
+        "end": true
+    },
+    {
+        "id": "L_3_3",
+        "videoFile": "L_3_3.m4v",
+        "nextLeft": "",
+        "nextRight": "",
+        "end": true
+    },
+    {
+        "id": "L_3_4",
+        "videoFile": "L_3_4.m4v",
+        "nextLeft": "",
+        "nextRight": "",
+        "end": true
+    },
+    {
+        "id": "L_3_5",
+        "videoFile": "L_3_5.m4v",
+        "nextLeft": "",
+        "nextRight": "",
+        "end": true
+    },
+    {
+        "id": "L_3_6",
+        "videoFile": "L_3_6.m4v",
+        "nextLeft": "",
+        "nextRight": "",
+        "end": true
     }
 ]
