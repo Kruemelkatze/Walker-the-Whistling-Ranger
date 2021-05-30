@@ -2,8 +2,13 @@ class Hud {
     constructor(scene, name="UI") {
         this.scene = scene;
         this.name = name;
-        this.hud = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI(name);
+
         this.fps = 30;
+        this.fadeTime = 3 * this.fps;
+
+        this.hud = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI(name);
+        this.font = 'Londrina Solid';
+
     }
 
     createTextElementPos(key, color="#FFFFFF", msg="", left=0, top=0) {
@@ -11,7 +16,7 @@ class Hud {
         textElement.text = msg;
         textElement.fontSize = 50;
         textElement.color = color;
-        textElement.fontFamily = 'New Rocker';
+        textElement.fontFamily = this.font;
         textElement.shadowBlur = 3;
         textElement.shadowColor = "#000";
         textElement.textVerticalAlignment = BABYLON.GUI.TextBlock.VERTICAL_ALIGNMENT_TOP;
@@ -36,7 +41,7 @@ class Hud {
         textElement.text = msg;
         textElement.fontSize = 64;
         textElement.color = color;
-        textElement.fontFamily = 'New Rocker';
+        textElement.fontFamily = this.font;
         textElement.shadowBlur = 3;
         textElement.shadowColor = "#000";
 
@@ -94,8 +99,7 @@ class Hud {
         this.getTextControl(key).animations = [];
         this.getTextControl(key).alpha = 1;
         if (fadeOut) {
-            let secs = 2 * this.fps;
-            this.fadeOutText(key, secs);
+            this.fadeOutText(key, this.fadeTime);
         }
     }
 
