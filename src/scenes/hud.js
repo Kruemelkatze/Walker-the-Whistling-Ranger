@@ -11,10 +11,10 @@ class Hud {
 
     }
 
-    createTextElementPos(key, color="#FFFFFF", msg="", left=0, top=0) {
+    createTextElementPos(key, color="#FFFFFF", msg="", left=0, top=0, size = 50) {
         let textElement = new BABYLON.GUI.TextBlock(key);
         textElement.text = msg;
-        textElement.fontSize = 50;
+        textElement.fontSize = size;
         textElement.color = color;
         textElement.fontFamily = this.font;
         textElement.shadowBlur = 3;
@@ -32,6 +32,7 @@ class Hud {
         // if (padRight) textElement.paddingRight = `${padRight}px`;
         // if (padBottom) textElement.paddingBottom = `${padBottom}px`;
         this.hud.addControl(textElement);
+        return textElement;
     }
 
     // alignX = left|right|center

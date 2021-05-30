@@ -15,6 +15,29 @@ class Credits {
 
         this.scene = scene;
 
+        this.hud = new Hud(this.scene);
+        var cvas = document.getElementById('renderCanvas');
+
+        // instruction image
+        let scale = 0.5;
+        let imgW = 1024 * scale;
+        let imgH = 1024 * scale;
+        this.hud.createImage("myimage", "images/group.jpg", cvas.width / 2 - imgW / 2, cvas.height / 2 - imgH / 2, imgW, imgH);
+
+        var txt = this.hud.createTextElementPos("1", "#FFFFFF", "Team", 0, 0, 50);
+        txt.textHorizontalAlignment = BABYLON.GUI.TextBlock.HORIZONTAL_ALIGNMENT_CENTER;
+        var txt = this.hud.createTextElementPos("12", "#FFFFFF", "Andi\nBernd\nFabian\nJürgen\nMathias", 0, 60, 25);
+        txt.textHorizontalAlignment = BABYLON.GUI.TextBlock.HORIZONTAL_ALIGNMENT_CENTER;
+
+        this.hud.createTextElementAlign("whistleInfo", "#FFFFFF", "Whistle to continue.", "center", "bottom");
+
+        this.whistleHandler = new WhistleHandler();
+        this.whistleHandler.enableWhistleHandler((whistlePattern) => {
+            if (whistlePattern.length) {
+                setNewScene(menu);
+            }
+        });
+
     }
 
     isReady() {
@@ -30,5 +53,8 @@ class Credits {
 
     dispose() {
         this.scene.dispose();
+
+        if (this.whistleHandler)
+            this.whistleHandler.disableWhistleHandler();
     }
 }

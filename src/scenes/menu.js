@@ -185,7 +185,8 @@ class Menu {
             this.overlayPlane.material.dispose();
             this.overlayPlane.material = null;
         }
-        this.whistleHandler.disableWhistleHandler();
+        if (this.whistleHandler)
+            this.whistleHandler.disableWhistleHandler();
         this.scene.dispose();
     }
 
