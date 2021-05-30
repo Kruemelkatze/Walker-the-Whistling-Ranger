@@ -177,6 +177,7 @@ class Menu {
         this.overlayPlane.material.diffuseTexture.dispose();
         this.overlayPlane.material.dispose();
         this.overlayPlane.material = null;
+        this.whistleHandler.disableWhistleHandler();
         this.scene.dispose();
     }
 

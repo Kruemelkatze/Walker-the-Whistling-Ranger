@@ -442,6 +442,7 @@ class Path {
     dispose() {
         // TODO cleanup
         this.scene.dispose();
+        this.whistleHandler.disableWhistleHandler();
     }
 
 }
