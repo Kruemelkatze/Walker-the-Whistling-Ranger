@@ -90,7 +90,7 @@ class Path {
 
         // Rest
         this.hud = new Hud(this.scene);
-        this.hud.createTextElementAlign("whistleInfo", "#FFFFFF", "",  "right", "bottom");
+        this.hud.createTextElementAlign("whistleInfo", "#FFFFFF", "", "right", "bottom");
         this.hud.createTextElementAlign("userInfo", "#FFFFFF", "", "right", "top");
         this.remainingHearts = 3;
         this.gameOver = false;
@@ -147,7 +147,7 @@ class Path {
 
     getHeartsText() {
         let txt = "";
-        for (let i = 0; i<this.remainingHearts; i++) {
+        for (let i = 0; i < this.remainingHearts; i++) {
             txt += "♡";
         }
         return txt;
@@ -403,14 +403,24 @@ class Path {
         if (this.gameOver)
             return;
 
-        // TODO do something
         var vid = this.currentVideo;
+        if (!vid || vid.duration == null)
+            return;
+
+        // TODO do something
         if (vid && vid.currentTime >= vid.duration && this.nextTurnRight != null && !this.encounterActive) {
             this.nextVideo(this.nextTurnRight);
         } else if (vid && vid.duration - vid.currentTime < 5) {
             if (!this.waitForTurn) {
-                this.hud.updateText("userInfo", "Choose a path...");
-                console.log("waiting for turn")
+                if (this.currentVideoData.end) {
+                    setTimeout(() => {
+                        setNewScene(endsuccess);
+                    }, 7000 / this.currentVideo.playbackRate
+                    );
+                } else {
+                    this.hud.updateText("userInfo", "Choose a path...");
+                    console.log("waiting for turn")
+                }
             }
             this.waitForTurn = true;
         } else {
