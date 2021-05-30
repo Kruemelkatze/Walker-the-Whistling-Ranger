@@ -84,6 +84,17 @@ class Hud {
         this.hud.addControl(textElement);
     }
 
+    createImage(key, file, x, y, w, h) {
+        var image = new BABYLON.GUI.Image(key, file);
+        image.left = x;
+        image.top = y;
+        image.width = `${w}px`;
+        image.height = `${h}px`;
+        image.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAlALIGNMENT_LEFT;
+        image.verticalAlignment = BABYLON.GUI.Control.VERTICAlALIGNMENT_TOP;
+        this.hud.addControl(image);
+    }
+
     getTextControl(key) {
         for (let e of this.hud.getDescendants()) {
             if (e.name == key) {

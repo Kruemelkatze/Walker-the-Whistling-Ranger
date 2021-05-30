@@ -16,6 +16,7 @@ class Menu {
         this.scene = scene;
 
         this.hud = new Hud(this.scene);
+        // this.hud.createImage("myimage", "images/left.png", 0, 0, 100, 100);
 
         // Add a camera to the scene and attach it to the canvas
         let camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 0, -10), scene);
