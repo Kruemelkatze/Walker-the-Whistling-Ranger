@@ -192,23 +192,37 @@ class Path {
                     if (whistlePattern[0] == -1) {
                         this.onCommandReceived("turn", false);
                         console.log("turn left");
+                        return;
                     } else if (whistlePattern[0] == 1) {
                         this.onCommandReceived("turn", true);
                         console.log("turn right");
+                        return;
                     }
                     break;
                 case 2:
                     if (whistlePattern[0] == 1 && whistlePattern[1] == -1) {
                         this.speedUp();
+                        return;
                     } else if (whistlePattern[0] == -1 && whistlePattern[1] == 1) {
                         this.slowDown();
-                    } else if (this.currentEncounterIsLeft === false && whistlePattern[0] == 1 && whistlePattern[1] == 1) {
-                        this.resolveEncounter(true);    // TODO check which pattern is expected to solve the current encounter
-                    } else if (this.currentEncounterIsLeft === true && whistlePattern[0] == -1 && whistlePattern[1] == -1) {
-                        this.resolveEncounter(true);    // TODO check which pattern is expected to solve the current encounter
+                        return;
+                    } else if (whistlePattern[0] == 1 && whistlePattern[1] == 1) {
+                        console.log("defend right");
+
+                        if (this.currentEncounterIsLeft === false)
+                            this.resolveEncounter(true);    // TODO check which pattern is expected to solve the current encounter
+                        return;
+                    } else if (whistlePattern[0] == -1 && whistlePattern[1] == -1) {
+                        console.log("defend left");
+
+                        if (this.currentEncounterIsLeft === true)
+                            this.resolveEncounter(true);    // TODO check which pattern is expected to solve the current encounter
+                        return;
                     }
                     break;
             }
+
+            console.log("did not recognize")
 
         });
     }
