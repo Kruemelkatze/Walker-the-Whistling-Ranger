@@ -202,16 +202,18 @@ class Path {
                         this.speedUp();
                     } else if (whistlePattern[0] == -1 && whistlePattern[1] == 1) {
                         this.slowDown();
-                    } else if (whistlePattern[0] == 1 && whistlePattern[1] == 1) {
-                        this.resolveEncounter();    // TODO check which pattern is expected to solve the current encounter
-                    } else if (whistlePattern[0] == -1 && whistlePattern[1] == -1) {
-
+                    } else if (this.currentEncounterIsLeft === false && whistlePattern[0] == 1 && whistlePattern[1] == 1) {
+                        this.resolveEncounter(true);    // TODO check which pattern is expected to solve the current encounter
+                    } else if (this.currentEncounterIsLeft === true && whistlePattern[0] == -1 && whistlePattern[1] == -1) {
+                        this.resolveEncounter(true);    // TODO check which pattern is expected to solve the current encounter
                     }
                     break;
             }
 
         });
     }
+
+
 
     setVideo(videoData) {
         this.nextTurnRight = null;
@@ -225,6 +227,7 @@ class Path {
         this.videoPlane.material.diffuseTexture = new BABYLON.VideoTexture("video", `${this.videoFolder}/${videoData.videoFile}`, this.scene, true);
         this.currentVideo.loop = false;
 
+        this.lastEncounter = 0;
         this.resolveEncounter();
         this.setPlaybackRate();
     }
@@ -336,6 +339,14 @@ class Path {
         this.currentEncounter = null;
         this.setPlaybackRate();
         this.fadeoutEncounterOverlay();
+
+        if (success === false) {
+            this.penalty();
+        }
+    }
+
+    penalty() {
+        console.log("Penalty!")
     }
 
     render() {
