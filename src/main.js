@@ -9,7 +9,8 @@ let credits = new Credits();
 let menu = new Menu();
 let game = new Game();
 let path = new Path();
-let end = new TheEnd();
+let endfail = new TheEndFail();
+let endsuccess = new TheEndSuccess();
 
 let currentScene = null;
 setNewScene(menu);
@@ -38,7 +39,10 @@ function handleSceneKeys(event) {
             newScene = path;
             break;
         case "5":
-            newScene = end;
+            newScene = endfail;
+            break;
+        case "6":
+            newScene = endsuccess;
             break;
         case "Escape":
             newScene = menu;

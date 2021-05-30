@@ -1,4 +1,4 @@
-class TheEnd {
+class TheEndFail {
     constructor() {
         this.scene;
     }
@@ -14,7 +14,7 @@ class TheEnd {
         this.scene = scene;
 
         this.hud = new Hud(this.scene);
-        this.hud.createTextElementAlign("whistleInfo", "#FFFFFF", "Game Over",  "center", "center");
+        this.hud.createTextElementAlign("whistleInfo", "#FFFFFF", "You failed...",  "center", "center");
     }
 
     onLoad() {

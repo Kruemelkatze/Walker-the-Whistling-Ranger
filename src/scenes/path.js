@@ -388,7 +388,7 @@ class Path {
             this.hud.createTextElementAlign("lostInfo", "#FF0000", "You die!", "center", "center");
             this.gameOver = true;
             setTimeout(() => {
-                setNewScene(end);
+                setNewScene(endfail);
             }, 5000
             );
         }
