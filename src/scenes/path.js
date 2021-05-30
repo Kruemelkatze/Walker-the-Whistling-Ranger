@@ -34,6 +34,7 @@ class Path {
     constructor() {
         this.scene;
         this.whistleHandler;
+        this.hud;
     }
 
     /**
@@ -88,7 +89,9 @@ class Path {
         // this.setEncounterOverlay(encounterData[0]);
 
         // Rest
-        this.addHUD()
+        this.hud = new Hud(this.scene);
+        this.hud.createTextElement("whistleInfo", "#FFFFFF", "", 0, 0, 200, 200);
+        // this.hud.updateText("whistleInfo", "testtt", true);
 
         scene.onKeyboardObservable.add(kbInfo => kbInfo.type == BABYLON.KeyboardEventTypes.KEYUP && this.onKeyUp(kbInfo));
 
@@ -191,10 +194,12 @@ class Path {
                 case 1:
                     if (whistlePattern[0] == -1) {
                         this.onCommandReceived("turn", false);
+                        this.hud.updateText("whistleInfo", "turn left", true);
                         console.log("turn left");
                         return;
                     } else if (whistlePattern[0] == 1) {
                         this.onCommandReceived("turn", true);
+                        this.hud.updateText("whistleInfo", "turn right", true);
                         console.log("turn right");
                         return;
                     }
@@ -207,12 +212,14 @@ class Path {
                         this.slowDown();
                         return;
                     } else if (whistlePattern[0] == 1 && whistlePattern[1] == 1) {
+                        this.hud.updateText("whistleInfo", "defend right", true);
                         console.log("defend right");
 
                         if (this.currentEncounterIsLeft === false)
                             this.resolveEncounter(true);    // TODO check which pattern is expected to solve the current encounter
                         return;
                     } else if (whistlePattern[0] == -1 && whistlePattern[1] == -1) {
+                        this.hud.updateText("whistleInfo", "defend left", true);
                         console.log("defend left");
 
                         if (this.currentEncounterIsLeft === true)
@@ -222,6 +229,7 @@ class Path {
                     break;
             }
 
+            this.hud.updateText("whistleInfo", "did not recognize", true);
             console.log("did not recognize")
 
         });
@@ -295,11 +303,6 @@ class Path {
 
     }
 
-    addHUD() {
-
-    }
-
-
     /**
      * Is triggered to start the game when the scene is loaded
      */
@@ -321,6 +324,7 @@ class Path {
         if (this.encounterActive)
             return;
 
+        this.hud.updateText("whistleInfo", "You are getting attacked!", true);
         console.log("Encounter!")
         this.encounterActive = true;
         this.lastEncounter = this.currentVideo.currentTime;
@@ -347,6 +351,7 @@ class Path {
             clearTimeout(this.encounterCallback);
         }
 
+        this.hud.updateText("whistleInfo", "You beat the foe!", true);
         console.log("Encounter Resolved!")
         this.encounterActive = false;
         this.lastEncounter = this.currentVideo.currentTime;
@@ -360,6 +365,7 @@ class Path {
     }
 
     penalty() {
+        this.hud.updateText("whistleInfo", "You got hit!", true);
         console.log("Penalty!")
     }
 
@@ -377,6 +383,7 @@ class Path {
             this.nextVideo(this.nextTurnRight);
         } else if (vid && vid.duration - vid.currentTime < 5) {
             if (!this.waitForTurn) {
+                this.hud.updateText("whistleInfo", "Choose a path...");
                 console.log("waiting for turn")
             }
             this.waitForTurn = true;
