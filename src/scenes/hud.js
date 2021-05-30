@@ -89,6 +89,7 @@ class Hud {
     }
 
     updateText(key, text="", fadeOut=false) {
+        // console.log(`Update text ${key}: '${text}'`)
         this.getTextControl(key).text = text;
         this.getTextControl(key).animations = [];
         this.getTextControl(key).alpha = 1;

@@ -93,6 +93,7 @@ class Path {
         this.hud.createTextElementAlign("whistleInfo", "#FFFFFF", "",  "right", "bottom");
         this.hud.createTextElementAlign("userInfo", "#FFFFFF", "", "right", "top");
         this.remainingHearts = 3;
+        this.gameOver = false;
         this.hud.createTextElementAlign("heartInfo", "#FFFFFF", this.getHeartsText(), "left", "top");
 
         // this.hud.createTextElementAlign("test", "#FFFFFF", "TEST", "left", "top");
@@ -385,6 +386,7 @@ class Path {
         console.log("Penalty!")
         if (this.remainingHearts == 0) {
             this.hud.createTextElementAlign("lostInfo", "#FFFFFF", "You die!", "center", "center");
+            this.gameOver = true;
             setTimeout(() => {
                 setNewScene(end);
             }, 5000
@@ -411,7 +413,6 @@ class Path {
             }
             this.waitForTurn = true;
         } else {
-            this.hud.updateText("userInfo", "");
             this.waitForTurn = false;
         }
 
