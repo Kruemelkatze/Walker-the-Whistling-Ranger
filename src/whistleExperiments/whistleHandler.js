@@ -31,6 +31,7 @@ class WhistleHandler {
 
     disableWhistleHandler() {
         clearInterval(this.interval);
+        this.whistleCommandCallback = null;
     }
 
     loop = () => {
